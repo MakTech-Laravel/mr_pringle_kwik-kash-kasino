@@ -52,7 +52,7 @@ export default function Profile() {
                     title="Profile"
                     description="Your community casino identity and account details."
                 />
-                <div className="grid gap-5 lg:grid-cols-[1fr_2.4fr]">
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)]">
                     <section className="kk-panel flex flex-col items-center p-6 text-center">
                         <span className="relative flex size-24 items-center justify-center rounded-full border border-gold/60 bg-crimson/20 font-display text-3xl text-gold">
                             {initialsOf(user.username)}

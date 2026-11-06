@@ -162,7 +162,7 @@ export default function House() {
                     ))}
                 </section>
 
-                <div className="grid gap-5 lg:grid-cols-[2fr_1fr]">
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
                     <section className="kk-panel p-5 sm:p-6">
                         <h2 className="kk-title text-lg text-ink">
                             House balance activity

@@ -40,8 +40,8 @@ export default function AdminProfile() {
                     title="Profile & settings"
                     description="Manage your account information and sign-in security."
                 />
-                <div className="grid gap-5 lg:grid-cols-[1fr_2.5fr]">
-                    <section className="kk-panel flex flex-col items-center p-6 text-center">
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.5fr)]">
+                    <section className="kk-panel flex min-w-0 flex-col items-center p-6 text-center">
                         <span className="flex size-[72px] items-center justify-center rounded-full border border-gold/50 bg-crimson/20 font-display text-2xl text-gold">
                             {initialsOf(user.name)}
                         </span>
@@ -76,7 +76,7 @@ export default function AdminProfile() {
                         </dl>
                     </section>
 
-                    <div className="space-y-5">
+                    <div className="min-w-0 space-y-5">
                         <section className="kk-panel p-5 sm:p-6">
                             <h2 className="kk-title text-lg text-ink">
                                 Profile information

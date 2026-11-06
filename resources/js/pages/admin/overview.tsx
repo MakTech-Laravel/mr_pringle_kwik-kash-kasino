@@ -140,7 +140,7 @@ export default function Overview() {
 
                 <section
                     aria-label="Key figures"
-                    className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-7"
+                    className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-7"
                 >
                     {adminOverview.kpis.map((kpi) => (
                         <StatCard
@@ -155,7 +155,7 @@ export default function Overview() {
                     ))}
                 </section>
 
-                <div className="grid gap-5 xl:grid-cols-[2fr_1fr]">
+                <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
                     <div className="space-y-5">
                         <section
                             className="kk-panel p-5 sm:p-6"

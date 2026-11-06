@@ -152,7 +152,7 @@ export default function Dashboard() {
                     </div>
                 </section>
 
-                <div className="grid gap-5 lg:grid-cols-[1.35fr_1fr]">
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
                     <section
                         className="kk-panel"
                         aria-labelledby="sessions-heading"
@@ -187,7 +187,7 @@ export default function Dashboard() {
                                 return (
                                     <li
                                         key={session.id}
-                                        className="flex flex-wrap items-center gap-3 border-b border-border p-4 last:border-b-0 sm:flex-nowrap sm:gap-4 sm:px-5"
+                                        className="flex flex-wrap items-center gap-3 border-b border-border p-4 last:border-b-0 sm:gap-4 sm:px-5"
                                     >
                                         <span
                                             className={cn(
