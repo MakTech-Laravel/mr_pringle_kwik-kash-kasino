@@ -86,3 +86,27 @@ test('game tables only accept known games and render for players', function () {
     $this->actingAs($player)->get(route('games.show', ['game' => 'roulette', 'session' => 'RLT-1107']))->assertOk();
     $this->actingAs($player)->get('/games/bingo/XX-1')->assertNotFound();
 });
+
+test('every admin page renders for an admin and stays forbidden for players', function (string $routeName) {
+    $this->actingAs(User::factory()->create())->get(route($routeName))->assertForbidden();
+    $this->actingAs(User::factory()->admin()->create())->get(route($routeName))->assertOk();
+})->with([
+    'admin.overview',
+    'admin.players',
+    'admin.cash-in',
+    'admin.cash-out',
+    'admin.wallets',
+    'admin.ledger',
+    'admin.house',
+    'admin.sessions',
+    'admin.game-history',
+    'admin.activity',
+    'admin.notifications',
+    'admin.profile',
+]);
+
+test('admins can open the session monitor', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)->get(route('admin.sessions.show', 'PK-1189'))->assertOk();
+});
