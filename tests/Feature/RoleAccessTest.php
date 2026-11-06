@@ -77,3 +77,12 @@ test('players can change their password from the account settings page', functio
 
     expect(password_verify('a-new-password-1', $player->refresh()->password))->toBeTrue();
 });
+
+test('game tables only accept known games and render for players', function () {
+    $player = User::factory()->create();
+
+    $this->actingAs($player)->get(route('games.show', ['game' => 'poker', 'session' => 'PKR-6402']))->assertOk();
+    $this->actingAs($player)->get(route('games.show', ['game' => 'blackjack', 'session' => 'BJ-2048']))->assertOk();
+    $this->actingAs($player)->get(route('games.show', ['game' => 'roulette', 'session' => 'RLT-1107']))->assertOk();
+    $this->actingAs($player)->get('/games/bingo/XX-1')->assertNotFound();
+});
