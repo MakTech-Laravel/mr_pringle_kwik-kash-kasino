@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,14 +13,22 @@ class DatabaseSeeder extends Seeder
 
     /**
      * Seed the application's database.
+     *
+     * DEMO ONLY: these credentials exist for local development and client demos.
+     * Never run this seeder against production.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Demo Player',
+            'username' => 'demo_player',
+            'password' => Hash::make('@user'),
+        ]);
+
+        User::factory()->admin()->create([
+            'name' => 'Demo Admin',
+            'username' => 'demo_admin',
+            'password' => Hash::make('@admin'),
         ]);
     }
 }
