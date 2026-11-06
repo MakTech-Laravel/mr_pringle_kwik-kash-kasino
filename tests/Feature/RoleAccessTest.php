@@ -46,3 +46,34 @@ test('the demo seeder creates exactly one player and one admin', function () {
         ->assertRedirect(route('dashboard', absolute: false));
     $this->assertAuthenticated();
 });
+
+test('every player page renders for a signed-in player', function (string $routeName) {
+    $player = User::factory()->create();
+
+    $this->actingAs($player)->get(route($routeName))->assertOk();
+})->with([
+    'lobby.index',
+    'lobby.sessions',
+    'wallet.index',
+    'wallet.cash-in',
+    'wallet.cash-out',
+    'history',
+    'transactions',
+    'notifications',
+    'player.profile',
+    'player.account-settings',
+]);
+
+test('players can change their password from the account settings page', function () {
+    $player = User::factory()->create();
+
+    $this->actingAs($player)
+        ->put(route('user-password.update'), [
+            'current_password' => 'password',
+            'password' => 'a-new-password-1',
+            'password_confirmation' => 'a-new-password-1',
+        ])
+        ->assertSessionHasNoErrors();
+
+    expect(password_verify('a-new-password-1', $player->refresh()->password))->toBeTrue();
+});
