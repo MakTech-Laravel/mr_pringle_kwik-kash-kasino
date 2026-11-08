@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreAdministratorRequest;
 use App\Http\Requests\Admin\UpdateAdministratorRequest;
 use App\Models\User;
+use App\Support\AdminAudit;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,8 @@ class AdministratorController extends Controller
         $admin->role = UserRole::Admin;
         $admin->save();
 
+        AdminAudit::record($request->user(), 'administrator.add', 'Administrator added: @'.$admin->username, $admin);
+
         Inertia::flash('toast', ['type' => 'success', 'message' => __(':name is now an administrator.', ['name' => $admin->username])]);
 
         return back();
@@ -61,6 +64,8 @@ class AdministratorController extends Controller
         }
 
         $administrator->save();
+
+        AdminAudit::record($request->user(), 'administrator.update', 'Administrator updated: @'.$administrator->username, $administrator, ['password_changed' => $request->filled('password')]);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Administrator updated.')]);
 
@@ -82,6 +87,8 @@ class AdministratorController extends Controller
 
             $administrator->delete();
         });
+
+        AdminAudit::record($request->user(), 'administrator.remove', 'Administrator removed: @'.$administrator->username);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Administrator removed.')]);
 

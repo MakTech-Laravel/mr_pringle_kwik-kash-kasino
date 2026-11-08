@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdministratorController;
 use App\Http\Controllers\Admin\CasinoStatusController;
 use App\Http\Controllers\Admin\PasswordAppealController as AdminPasswordAppealController;
@@ -85,7 +86,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::inertia('sessions', 'admin/sessions')->name('sessions');
     Route::get('sessions/{session}', [SessionMonitorController::class, 'show'])->name('sessions.show');
     Route::inertia('game-history', 'admin/game-history')->name('game-history');
-    Route::inertia('activity', 'admin/activity')->name('activity');
+    Route::get('activity', [ActivityLogController::class, 'index'])->name('activity');
     Route::inertia('notifications', 'admin/notifications')->name('notifications');
     Route::get('profile', [AccountController::class, 'admin'])
         ->middleware('password.confirm')

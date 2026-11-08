@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Events\CasinoStatusChanged;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Support\AdminAudit;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Throwable;
@@ -20,6 +21,8 @@ class CasinoStatusController extends Controller
         $open = (bool) $data['open'];
 
         Setting::write(Setting::CASINO_OPEN, $open);
+
+        AdminAudit::record($request->user(), 'casino.'.($open ? 'open' : 'close'), $open ? 'Casino opened' : 'Casino closed');
 
         try {
             broadcast(new CasinoStatusChanged($open));
