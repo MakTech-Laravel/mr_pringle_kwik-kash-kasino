@@ -20,12 +20,12 @@
 Homestead.json
 Homestead.yaml
 npm-debug.log
+temp_auto_push.bat
 yarn-error.log
 /auth.json
 /.fleet
 /.idea
 /.nova
-/.vscode
 /.zed
 /.agents
 /.amp
@@ -43,3 +43,5 @@ yarn-error.log
 /boost.json
 /opencode.json
 /opencode.jsonc
+.gitignore
+branch_structure.json
