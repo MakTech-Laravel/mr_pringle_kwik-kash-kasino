@@ -1,9 +1,10 @@
-import { useSyncExternalStore } from 'react';
+import { usePage } from '@inertiajs/react';
+import { useEffect, useSyncExternalStore } from 'react';
 
 /**
- * casino open/closed switch shared between the admin console and
- * the player panel inside one browser tab. In-memory only (never persisted).
- * Replace with an Inertia prop + Reverb channel in the backend phase.
+ * The casino open/closed switch. The server owns the value (shared Inertia
+ * prop `casinoOpen`, pushed live over the `casino` channel); this tiny store
+ * lets every component in the tab read it and react at once.
  */
 let casinoOpen = true;
 const listeners = new Set<() => void>();
@@ -16,9 +17,17 @@ function subscribe(listener: () => void) {
     };
 }
 
-export function setCasinoOpen(next: boolean): void {
-    casinoOpen = next;
+function emit() {
     listeners.forEach((listener) => listener());
+}
+
+export function setCasinoOpen(next: boolean): void {
+    if (next === casinoOpen) {
+        return;
+    }
+
+    casinoOpen = next;
+    emit();
 }
 
 export function useCasinoOpen(): boolean {
@@ -26,5 +35,38 @@ export function useCasinoOpen(): boolean {
         subscribe,
         () => casinoOpen,
         () => true,
+    );
+}
+
+/** Keeps the store in step with the server value on every page visit. */
+export function useCasinoSync(): void {
+    const { casinoOpen: serverValue } = usePage<{ casinoOpen?: boolean }>()
+        .props;
+
+    useEffect(() => {
+        if (typeof serverValue === 'boolean') {
+            setCasinoOpen(serverValue);
+        }
+    }, [serverValue]);
+}
+
+/* The admin confirm dialog: any control can ask for a change, one dialog confirms it. */
+let pending: boolean | null = null;
+
+export function requestCasinoChange(next: boolean): void {
+    pending = next;
+    emit();
+}
+
+export function clearCasinoChange(): void {
+    pending = null;
+    emit();
+}
+
+export function usePendingCasinoChange(): boolean | null {
+    return useSyncExternalStore(
+        subscribe,
+        () => pending,
+        () => null,
     );
 }
