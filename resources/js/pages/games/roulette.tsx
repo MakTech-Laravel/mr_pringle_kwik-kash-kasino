@@ -6,10 +6,17 @@ import { useGameSession } from '@/hooks/games/use-game-session';
 import { useRoulette } from '@/hooks/games/use-roulette';
 import { demoWallet } from '@/mocks/casino';
 
-export default function Roulette({ sessionId }: { sessionId: string }) {
-    const { session, casinoOpen, isHost } = useGameSession(
+export default function Roulette({
+    sessionId,
+    mode,
+}: {
+    sessionId: string;
+    mode: 'host' | 'player';
+}) {
+    const { session, casinoOpen, user, isHost } = useGameSession(
         'roulette',
         sessionId,
+        mode,
     );
     const game = useRoulette({
         startingBalance: demoWallet.balance,
@@ -39,6 +46,7 @@ export default function Roulette({ sessionId }: { sessionId: string }) {
                 statusLabel={label}
                 statusTone={phase === 'waiting-host' ? 'danger' : 'success'}
                 isHost={isHost}
+                adminPlayer={user.role === 'admin'}
                 footnote="Demo table: the winning number follows a fixed script in your browser. Real outcomes, variant and payouts are decided and settled on the server."
             >
                 <RouletteTable game={game} isHost={isHost} />

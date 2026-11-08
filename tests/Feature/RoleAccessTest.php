@@ -16,11 +16,11 @@ test('players can open the player panel but not the admin console', function () 
     $this->actingAs($player)->get(route('admin.players'))->assertForbidden();
 });
 
-test('admins can open the admin console and the player view', function () {
+test('admins can open the admin console but not the player panel', function () {
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)->get(route('admin.overview'))->assertOk();
-    $this->actingAs($admin)->get(route('dashboard'))->assertOk();
+    $this->actingAs($admin)->get(route('dashboard'))->assertRedirect(route('admin.overview'));
 });
 
 test('each role is redirected to its own home after login', function () {
@@ -45,6 +45,63 @@ test('the demo seeder creates exactly one player and one admin', function () {
     $this->post(route('login.store'), ['username' => 'user', 'password' => 'password'])
         ->assertRedirect(route('dashboard', absolute: false));
     $this->assertAuthenticated();
+});
+
+test('the root URL redirects guests to login permanently and users to their home', function () {
+    $this->get('/')->assertStatus(301)->assertRedirect(route('login'));
+
+    $this->actingAs(User::factory()->create())->get('/')->assertRedirect(route('dashboard'));
+});
+
+test('signed-in users are bounced away from the login page to their own home', function () {
+    $this->actingAs(User::factory()->create())->get(route('login'))->assertRedirect(route('dashboard'));
+    $this->actingAs(User::factory()->admin()->create())->get(route('login'))->assertRedirect(route('admin.overview'));
+});
+
+test('every player-only page redirects an admin back to the admin console', function (string $routeName) {
+    $this->actingAs(User::factory()->admin()->create())
+        ->get(route($routeName))
+        ->assertRedirect(route('admin.overview'));
+})->with([
+    'dashboard',
+    'lobby.index',
+    'lobby.sessions',
+    'wallet.index',
+    'wallet.cash-in',
+    'wallet.cash-out',
+    'history',
+    'transactions',
+    'notifications',
+    'player.profile',
+    'player.account-settings',
+]);
+
+test('an admin must choose to join a table as host or as a player', function () {
+    $admin = User::factory()->admin()->create();
+    $table = ['game' => 'poker', 'session' => 'PKR-6402'];
+
+    $this->actingAs($admin)->get(route('games.show', $table))->assertRedirect(route('admin.sessions'));
+    $this->actingAs($admin)->get(route('games.show', $table + ['as' => 'dealer']))->assertRedirect(route('admin.sessions'));
+    $this->actingAs($admin)->get(route('games.show', $table + ['as' => 'host']))->assertOk();
+});
+
+test('an admin cannot be host and player of the same session at once', function () {
+    $admin = User::factory()->admin()->create();
+    $table = ['game' => 'poker', 'session' => 'PKR-6402'];
+
+    $this->actingAs($admin)->get(route('games.show', $table + ['as' => 'host']))->assertOk();
+    $this->get(route('games.show', $table + ['as' => 'player']))->assertRedirect(route('admin.sessions'));
+
+    $this->post(route('tables.leave', 'PKR-6402'))->assertRedirect(route('admin.sessions'));
+    $this->get(route('games.show', $table + ['as' => 'player']))->assertOk();
+    $this->get(route('games.show', $table + ['as' => 'host']))->assertRedirect(route('admin.sessions'));
+});
+
+test('a different session is not affected by a seat held elsewhere', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)->get(route('games.show', ['game' => 'poker', 'session' => 'PKR-1', 'as' => 'host']))->assertOk();
+    $this->get(route('games.show', ['game' => 'blackjack', 'session' => 'BJ-2', 'as' => 'player']))->assertOk();
 });
 
 test('every player page renders for a signed-in player', function (string $routeName) {

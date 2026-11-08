@@ -6,10 +6,17 @@ import { useGameSession } from '@/hooks/games/use-game-session';
 import { usePoker } from '@/hooks/games/use-poker';
 import { demoWallet } from '@/mocks/casino';
 
-export default function Poker({ sessionId }: { sessionId: string }) {
+export default function Poker({
+    sessionId,
+    mode,
+}: {
+    sessionId: string;
+    mode: 'host' | 'player';
+}) {
     const { session, casinoOpen, user, isHost } = useGameSession(
         'poker',
         sessionId,
+        mode,
     );
     const game = usePoker({
         human: !isHost,
@@ -39,6 +46,7 @@ export default function Poker({ sessionId }: { sessionId: string }) {
                 statusLabel={label}
                 statusTone={phase === 'waiting' ? 'danger' : 'success'}
                 isHost={isHost}
+                adminPlayer={user.role === 'admin'}
                 footnote="Demo table for 2–6 players: opponents are scripted and the showdown winner is not evaluated. Poker variant, rules and settlement are host-configured and server-side."
             >
                 <PokerTable game={game} isHost={isHost} />

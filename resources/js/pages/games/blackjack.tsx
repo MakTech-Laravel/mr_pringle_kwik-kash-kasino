@@ -6,10 +6,17 @@ import { useBlackjack } from '@/hooks/games/use-blackjack';
 import { useGameSession } from '@/hooks/games/use-game-session';
 import { demoWallet } from '@/mocks/casino';
 
-export default function Blackjack({ sessionId }: { sessionId: string }) {
+export default function Blackjack({
+    sessionId,
+    mode,
+}: {
+    sessionId: string;
+    mode: 'host' | 'player';
+}) {
     const { session, casinoOpen, user, isHost } = useGameSession(
         'blackjack',
         sessionId,
+        mode,
     );
     const game = useBlackjack({
         startingBalance: demoWallet.balance,
@@ -39,6 +46,7 @@ export default function Blackjack({ sessionId }: { sessionId: string }) {
                 statusLabel={label}
                 statusTone={phase === 'waiting-host' ? 'danger' : 'success'}
                 isHost={isHost}
+                adminPlayer={user.role === 'admin'}
                 footnote="Demo table: cards, payouts and wallet changes are simulated in your browser and never saved. Real rules and settlement run on the server."
             >
                 <BlackjackTable

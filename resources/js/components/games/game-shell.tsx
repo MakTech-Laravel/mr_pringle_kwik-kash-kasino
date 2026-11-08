@@ -1,9 +1,9 @@
-import { Link } from '@inertiajs/react';
-import { Shield, Users } from 'lucide-react';
+import { Link, router } from '@inertiajs/react';
+import { LogOut, Shield, Users } from 'lucide-react';
 import type { ReactNode } from 'react';
 import ActionButton from '@/components/casino/action-button';
 import StatusPill, { type PillTone } from '@/components/casino/status-pill';
-import { sessions } from '@/routes/lobby';
+import { leave } from '@/routes/tables';
 import type { GameSession } from '@/types/casino';
 
 type Props = {
@@ -13,6 +13,8 @@ type Props = {
     statusTone: PillTone;
     /** Viewer hosts this session (admin): cannot take a seat. */
     isHost: boolean;
+    /** Viewer is an admin sitting as a player: show who they are and a way out. */
+    adminPlayer?: boolean;
     children: ReactNode;
     footnote: string;
 };
@@ -24,6 +26,7 @@ export default function GameShell({
     statusLabel,
     statusTone,
     isHost,
+    adminPlayer = false,
     children,
     footnote,
 }: Props) {
@@ -55,13 +58,21 @@ export default function GameShell({
                         You are hosting this session, so you view it with host
                         controls and cannot take a player seat.
                     </p>
-                    <ActionButton
-                        asChild
-                        look="outline"
-                        className="h-9 px-4 text-xs"
-                    >
-                        <Link href={sessions()}>Other sessions</Link>
-                    </ActionButton>
+                    <LeaveButton session={session.id} />
+                </div>
+            )}
+
+            {adminPlayer && !isHost && (
+                <div
+                    role="status"
+                    className="flex flex-col gap-3 rounded-lg border border-gold/30 bg-gold/5 p-4 text-xs text-ink sm:flex-row sm:items-center"
+                >
+                    <Shield className="size-4 shrink-0 text-gold" />
+                    <p className="flex-1">
+                        You joined this session as a player. You cannot host it
+                        while you hold a seat.
+                    </p>
+                    <LeaveButton session={session.id} />
                 </div>
             )}
 
@@ -71,6 +82,18 @@ export default function GameShell({
                 {footnote}
             </p>
         </div>
+    );
+}
+
+function LeaveButton({ session }: { session: string }) {
+    return (
+        <ActionButton
+            look="outline"
+            className="h-9 px-4 text-xs"
+            onClick={() => router.post(leave.url(session))}
+        >
+            <LogOut /> Leave table
+        </ActionButton>
     );
 }
 

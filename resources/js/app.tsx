@@ -12,15 +12,19 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    layout: (name) => {
+    layout: (name, page) => {
         switch (true) {
-            case name === 'welcome':
-                return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('admin/'):
                 return AdminLayout;
-            case name.startsWith('player/') || name.startsWith('games/'):
+            case name.startsWith('games/'):
+                // Admins sit at tables from inside the admin console.
+                return (page.props as { auth?: { user?: { role?: string } } })
+                    .auth?.user?.role === 'admin'
+                    ? AdminLayout
+                    : PlayerLayout;
+            case name.startsWith('player/'):
                 return PlayerLayout;
             case name.startsWith('settings/'):
                 return [AppLayout, SettingsLayout];

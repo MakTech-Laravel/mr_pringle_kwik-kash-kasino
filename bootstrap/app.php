@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Middleware\EnsureUserIsPlayer;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
@@ -19,8 +20,14 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
+        // Signed-in users who open a guest page (login, register) go to their own home.
+        $middleware->redirectUsersTo(
+            fn (Request $request) => route($request->user()->role->homeRouteName()),
+        );
+
         $middleware->alias([
             'admin' => EnsureUserIsAdmin::class,
+            'player' => EnsureUserIsPlayer::class,
         ]);
 
         $middleware->web(append: [

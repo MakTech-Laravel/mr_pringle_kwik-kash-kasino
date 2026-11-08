@@ -166,10 +166,13 @@ export default function SessionMonitor({ sessionId }: { sessionId: string }) {
                             </div>
                             <ActionButton asChild className="h-10 px-4 text-xs">
                                 <Link
-                                    href={showGame({
-                                        game: session.game,
-                                        session: session.id,
-                                    })}
+                                    href={showGame(
+                                        {
+                                            game: session.game,
+                                            session: session.id,
+                                        },
+                                        { query: { as: 'host' } },
+                                    )}
                                 >
                                     Open host controls
                                 </Link>

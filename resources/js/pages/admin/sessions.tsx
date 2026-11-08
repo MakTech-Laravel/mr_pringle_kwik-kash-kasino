@@ -3,6 +3,7 @@ import { ChevronRight, Dices, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import ActionButton from '@/components/casino/action-button';
+import JoinSessionMenu from '@/components/casino/join-session-menu';
 import DataTable, { type Column } from '@/components/casino/data-table';
 import PageHeader from '@/components/casino/page-header';
 import StatusPill from '@/components/casino/status-pill';
@@ -67,7 +68,7 @@ export default function Sessions() {
                 game,
                 title: name.trim(),
                 hostName: 'James Dalton',
-                hostUsername: 'demo_admin',
+                hostUsername: 'admin',
                 seated: 0,
                 capacity,
                 status: draft
@@ -105,13 +106,16 @@ export default function Sessions() {
             header: 'Action',
             action: true,
             cell: (s) => (
-                <ActionButton
-                    asChild
-                    look="outline"
-                    className="h-8 px-3 text-[11px]"
-                >
-                    <Link href={show(s.id)}>Manage</Link>
-                </ActionButton>
+                <div className="flex items-center gap-2">
+                    <ActionButton
+                        asChild
+                        look="outline"
+                        className="h-8 px-3 text-[11px]"
+                    >
+                        <Link href={show(s.id)}>Manage</Link>
+                    </ActionButton>
+                    <JoinSessionMenu session={s} />
+                </div>
             ),
         },
     ];
