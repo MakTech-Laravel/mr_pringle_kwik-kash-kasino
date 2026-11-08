@@ -1,4 +1,4 @@
-import { Link, router } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import { LogOut, Shield, Users } from 'lucide-react';
 import type { ReactNode } from 'react';
 import ActionButton from '@/components/casino/action-button';

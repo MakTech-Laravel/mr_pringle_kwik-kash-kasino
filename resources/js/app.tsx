@@ -27,7 +27,14 @@ void createInertiaApp({
             case name.startsWith('player/'):
                 return PlayerLayout;
             case name.startsWith('settings/'):
-                return [AppLayout, SettingsLayout];
+                // Security and profile settings sit inside the role's own shell.
+                return [
+                    (page.props as { auth?: { user?: { role?: string } } }).auth
+                        ?.user?.role === 'admin'
+                        ? AdminLayout
+                        : PlayerLayout,
+                    SettingsLayout,
+                ];
             default:
                 return AppLayout;
         }

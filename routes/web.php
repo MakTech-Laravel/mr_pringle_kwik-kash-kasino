@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\PasswordAppealController as AdminPasswordAppealController;
 use App\Http\Controllers\Admin\RealtimeController;
 use App\Http\Controllers\Admin\SessionMonitorController;
 use App\Http\Controllers\GameTableController;
+use App\Http\Controllers\PasswordAppealController;
+use App\Http\Controllers\PasswordAppealResetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +18,22 @@ Route::get('/', function (Request $request) {
         ? redirect()->route($request->user()->role->homeRouteName())
         : redirect()->route('login', status: 301);
 })->name('home');
+
+/*
+ * Forgotten password. There is no self-service reset and no email on accounts:
+ * players file an appeal (email proven by a one-time code) and an admin hands
+ * back a one-time link or a temporary password.
+ */
+Route::prefix('password-appeal')->name('password-appeal.')->group(function () {
+    Route::get('/', [PasswordAppealController::class, 'create'])->name('create');
+    Route::post('/', [PasswordAppealController::class, 'store'])->middleware('throttle:password-appeal')->name('store');
+    Route::post('verify', [PasswordAppealController::class, 'verify'])->middleware('throttle:password-appeal-code')->name('verify');
+    Route::post('resend', [PasswordAppealController::class, 'resend'])->middleware('throttle:password-appeal')->name('resend');
+    Route::post('cancel', [PasswordAppealController::class, 'cancel'])->name('cancel');
+    Route::get('sent', [PasswordAppealController::class, 'sent'])->name('sent');
+    Route::get('reset/{token}', [PasswordAppealResetController::class, 'show'])->name('reset');
+    Route::post('reset/{token}', [PasswordAppealResetController::class, 'update'])->middleware('throttle:password-appeal-code')->name('reset.update');
+});
 
 /*
  * Player panel. Admins are redirected to the admin console and take part in
@@ -64,6 +83,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::inertia('activity', 'admin/activity')->name('activity');
     Route::inertia('notifications', 'admin/notifications')->name('notifications');
     Route::inertia('profile', 'admin/profile')->name('profile');
+
+    Route::controller(AdminPasswordAppealController::class)->prefix('password-appeals')->name('password-appeals.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('{appeal}/link', 'link')->name('link');
+        Route::post('{appeal}/temporary-password', 'temporaryPassword')->name('temporary-password');
+        Route::post('{appeal}/resolve', 'resolve')->name('resolve');
+        Route::post('{appeal}/reject', 'reject')->name('reject');
+    });
 
     Route::controller(RealtimeController::class)->prefix('realtime')->name('realtime.')->group(function () {
         Route::get('/', 'index')->name('index');
