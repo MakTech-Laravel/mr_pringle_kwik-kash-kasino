@@ -1,7 +1,6 @@
 import { createInertiaApp } from '@inertiajs/react';
-import { Toaster } from '@/components/ui/sonner';
+import AppToaster from '@/components/app-toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { initializeTheme } from '@/hooks/use-appearance';
 import AdminLayout from '@/layouts/admin-layout';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
@@ -12,18 +11,29 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    layout: (name) => {
+    layout: (name, page) => {
         switch (true) {
-            case name === 'welcome':
-                return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('admin/'):
                 return AdminLayout;
-            case name.startsWith('player/') || name.startsWith('games/'):
+            case name.startsWith('games/'):
+                // Admins sit at tables from inside the admin console.
+                return (page.props as { auth?: { user?: { role?: string } } })
+                    .auth?.user?.role === 'admin'
+                    ? AdminLayout
+                    : PlayerLayout;
+            case name.startsWith('player/'):
                 return PlayerLayout;
             case name.startsWith('settings/'):
-                return [AppLayout, SettingsLayout];
+                // Security and profile settings sit inside the role's own shell.
+                return [
+                    (page.props as { auth?: { user?: { role?: string } } }).auth
+                        ?.user?.role === 'admin'
+                        ? AdminLayout
+                        : PlayerLayout,
+                    SettingsLayout,
+                ];
             default:
                 return AppLayout;
         }
@@ -33,7 +43,7 @@ void createInertiaApp({
         return (
             <TooltipProvider delayDuration={0}>
                 {app}
-                <Toaster />
+                <AppToaster />
             </TooltipProvider>
         );
     },
@@ -41,6 +51,3 @@ void createInertiaApp({
         color: '#D6AD50',
     },
 });
-
-// This will set light / dark mode on load...
-initializeTheme();
