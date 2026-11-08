@@ -39,10 +39,10 @@ test('the demo seeder creates exactly one player and one admin', function () {
     $this->seed(DatabaseSeeder::class);
 
     expect(User::count())->toBe(2);
-    expect(User::where('username', 'demo_player')->first()->role)->toBe(UserRole::Player);
-    expect(User::where('username', 'demo_admin')->first()->role)->toBe(UserRole::Admin);
+    expect(User::where('username', 'user')->first()->role)->toBe(UserRole::Player);
+    expect(User::where('username', 'admin')->first()->role)->toBe(UserRole::Admin);
 
-    $this->post(route('login.store'), ['username' => 'demo_player', 'password' => '@user'])
+    $this->post(route('login.store'), ['username' => 'user', 'password' => 'password'])
         ->assertRedirect(route('dashboard', absolute: false));
     $this->assertAuthenticated();
 });
