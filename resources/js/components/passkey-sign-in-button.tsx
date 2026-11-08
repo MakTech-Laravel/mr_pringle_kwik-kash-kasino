@@ -1,3 +1,4 @@
+import type { UrlMethodPair } from '@inertiajs/core';
 import { router } from '@inertiajs/react';
 import { usePasskeyVerify } from '@laravel/passkeys/react';
 import { Fingerprint } from 'lucide-react';
@@ -13,14 +14,26 @@ import {
 type Props = {
     /** Reports a passkey error so the form can show it under the password field. */
     showError?: boolean;
+    /** Custom passkey endpoints, e.g. the password-confirmation ones. Defaults to sign-in. */
+    routes?: { options: UrlMethodPair; submit: UrlMethodPair };
+    label?: string;
 };
 
 /**
- * Compact passkey sign-in: an icon button that sits beside the password
- * field. Passkeys are discoverable, so no username is needed.
+ * Compact passkey button: an icon that sits beside the password field. Passkeys are discoverable, so no username is needed.
  */
-export default function PasskeySignInButton({ showError = true }: Props) {
+export default function PasskeySignInButton({
+    showError = true,
+    routes,
+    label = 'Sign in with a passkey',
+}: Props) {
     const { verify, isLoading, error, isSupported } = usePasskeyVerify({
+        ...(routes && {
+            routes: {
+                options: routes.options.url,
+                submit: routes.submit.url,
+            },
+        }),
         onSuccess: (response) => {
             // "/" sends each role to its own home.
             router.visit(response.redirect ?? '/');
@@ -42,13 +55,13 @@ export default function PasskeySignInButton({ showError = true }: Props) {
                         className="size-9 shrink-0 border-gold/40 text-gold hover:bg-gold/10 hover:text-gold"
                         onClick={verify}
                         disabled={isLoading}
-                        aria-label="Sign in with a passkey"
+                        aria-label={label}
                         data-test="passkey-login-button"
                     >
                         {isLoading ? <Spinner /> : <Fingerprint />}
                     </Button>
                 </TooltipTrigger>
-                <TooltipContent>Sign in with a passkey</TooltipContent>
+                <TooltipContent>{label}</TooltipContent>
             </Tooltip>
             {showError && error && (
                 <div className="basis-full">

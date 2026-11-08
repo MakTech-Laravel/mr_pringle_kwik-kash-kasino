@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\AdministratorController;
+use App\Http\Controllers\Admin\CasinoStatusController;
 use App\Http\Controllers\Admin\PasswordAppealController as AdminPasswordAppealController;
 use App\Http\Controllers\Admin\RealtimeController;
 use App\Http\Controllers\Admin\SessionMonitorController;
@@ -53,7 +56,9 @@ Route::middleware(['auth', 'player'])->group(function () {
     Route::inertia('transactions', 'player/transactions')->name('transactions');
     Route::inertia('notifications', 'player/notifications')->name('notifications');
     Route::inertia('profile', 'player/profile')->name('player.profile');
-    Route::inertia('profile/settings', 'player/account-settings')->name('player.account-settings');
+    Route::get('profile/settings', [AccountController::class, 'player'])
+        ->middleware('password.confirm')
+        ->name('player.account-settings');
 });
 
 /*
@@ -82,7 +87,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::inertia('game-history', 'admin/game-history')->name('game-history');
     Route::inertia('activity', 'admin/activity')->name('activity');
     Route::inertia('notifications', 'admin/notifications')->name('notifications');
-    Route::inertia('profile', 'admin/profile')->name('profile');
+    Route::get('profile', [AccountController::class, 'admin'])
+        ->middleware('password.confirm')
+        ->name('profile');
+
+    Route::put('casino-status', [CasinoStatusController::class, 'update'])->name('casino-status.update');
+
+    Route::controller(AdministratorController::class)->prefix('administrators')->name('administrators.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::patch('{administrator}', 'update')->name('update');
+        Route::delete('{administrator}', 'destroy')->name('destroy');
+    });
 
     Route::controller(AdminPasswordAppealController::class)->prefix('password-appeals')->name('password-appeals.')->group(function () {
         Route::get('/', 'index')->name('index');
