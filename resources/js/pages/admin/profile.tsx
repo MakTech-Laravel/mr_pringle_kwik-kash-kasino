@@ -1,9 +1,12 @@
-import { Form, Head, Link, usePage } from '@inertiajs/react';
-import { Fingerprint, Lock } from 'lucide-react';
+import { Form, Head, usePage } from '@inertiajs/react';
+import { Lock } from 'lucide-react';
 import { useState } from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import ActionButton from '@/components/casino/action-button';
+import AccountSecurityPanels, {
+    type AccountSecurityProps,
+} from '@/components/casino/account-security-panels';
 import PageHeader from '@/components/casino/page-header';
 import StatusPill from '@/components/casino/status-pill';
 import InputError from '@/components/input-error';
@@ -19,11 +22,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { initialsOf } from '@/lib/format';
-import { edit as editSecurity } from '@/routes/security';
 import type { Auth } from '@/types';
 
-/** Real profile + password forms (Settings controllers), styled per the admin Figma. */
-export default function AdminProfile() {
+/** Profile, password, two-factor and passkeys. The server asks for the password before this page opens. */
+export default function AdminProfile(props: AccountSecurityProps) {
     const { auth } = usePage<{ auth: Auth }>().props;
     const user = auth.user;
     const [passwordOpen, setPasswordOpen] = useState(false);
@@ -136,7 +138,7 @@ export default function AdminProfile() {
 
                         <section className="kk-panel p-5 sm:p-6">
                             <h2 className="kk-title text-lg text-ink">
-                                Password & security
+                                Password
                             </h2>
                             <p className="mt-1 text-[11px] text-ink-muted">
                                 Use a strong, unique password for this account.
@@ -156,28 +158,8 @@ export default function AdminProfile() {
                                     Change password
                                 </ActionButton>
                             </div>
-                            <div className="mt-3 flex items-center gap-4 rounded-lg border border-border p-4">
-                                <span className="flex size-10 items-center justify-center rounded-lg bg-gold/10 text-gold">
-                                    <Fingerprint className="size-4" />
-                                </span>
-                                <span className="flex-1">
-                                    <span className="block text-xs font-semibold text-ink">
-                                        Two-factor and passkeys
-                                    </span>
-                                    <span className="text-[11px] text-ink-muted">
-                                        Authenticator app, recovery codes and
-                                        passkeys
-                                    </span>
-                                </span>
-                                <ActionButton
-                                    asChild
-                                    look="outline"
-                                    className="h-10 px-4 text-xs"
-                                >
-                                    <Link href={editSecurity()}>Manage</Link>
-                                </ActionButton>
-                            </div>
                         </section>
+                        <AccountSecurityPanels {...props} />
                     </div>
                 </div>
             </div>

@@ -13,24 +13,12 @@ import {
     Users,
     Wallet,
 } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
 import CreditMovementChart from '@/components/casino/credit-movement-chart';
 import ActionButton from '@/components/casino/action-button';
 import StatCard from '@/components/casino/stat-card';
 import StatusPill from '@/components/casino/status-pill';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import { Switch } from '@/components/ui/switch';
-import { setCasinoOpen, useCasinoOpen } from '@/hooks/use-casino-status';
+import { requestCasinoChange, useCasinoOpen } from '@/hooks/use-casino-status';
 import { cn } from '@/lib/utils';
 import { adminOverview } from '@/mocks/casino';
 import {
@@ -96,7 +84,6 @@ const quickActions = [
 export default function Overview() {
     const { auth } = usePage<{ auth: Auth }>().props;
     const casinoOpen = useCasinoOpen();
-    const [confirm, setConfirm] = useState<boolean | null>(null);
     const firstName = auth.user.name.split(' ')[0];
     const today = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
@@ -332,7 +319,7 @@ export default function Overview() {
                             </div>
                             <Switch
                                 checked={casinoOpen}
-                                onCheckedChange={(next) => setConfirm(next)}
+                                onCheckedChange={requestCasinoChange}
                                 aria-label="Casino open for play"
                                 className="data-[state=checked]:bg-success"
                             />
@@ -371,39 +358,6 @@ export default function Overview() {
                     </section>
                 </div>
             </div>
-
-            <AlertDialog
-                open={confirm !== null}
-                onOpenChange={(open) => !open && setConfirm(null)}
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>
-                            {confirm ? 'Open the casino?' : 'Close the casino?'}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {confirm
-                                ? 'Players will be able to join hosted sessions again.'
-                                : 'Players will see the "Casino closed" screen and cannot join new sessions. The change applies to everyone right away.'}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                            onClick={() => {
-                                setCasinoOpen(Boolean(confirm));
-                                toast.success(
-                                    confirm
-                                        ? 'Casino is now open'
-                                        : 'Casino is now closed',
-                                );
-                            }}
-                        >
-                            Confirm
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </>
     );
 }

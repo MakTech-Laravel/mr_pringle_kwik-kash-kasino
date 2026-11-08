@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Enums\AppealStatus;
 use App\Models\PasswordAppeal;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -53,6 +54,7 @@ class HandleInertiaRequests extends Middleware
             'pendingAppeals' => fn () => $request->user()?->isAdmin()
                 ? PasswordAppeal::query()->where('status', AppealStatus::Pending)->count()
                 : 0,
+            'casinoOpen' => fn () => Setting::casinoIsOpen(),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

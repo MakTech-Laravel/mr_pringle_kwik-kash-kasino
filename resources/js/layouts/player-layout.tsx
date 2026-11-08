@@ -33,7 +33,9 @@ import {
     SheetHeader,
     SheetTitle,
 } from '@/components/ui/sheet';
+import { useCasinoSync } from '@/hooks/use-casino-status';
 import { useCurrentUrl } from '@/hooks/use-current-url';
+import { useRealtimeFeed } from '@/hooks/use-realtime-feed';
 import { usePlayerShell } from '@/hooks/use-player-shell';
 import { formatNumber, initialsOf } from '@/lib/format';
 import { cn } from '@/lib/utils';
@@ -44,7 +46,6 @@ import {
     notifications,
     transactions,
 } from '@/routes';
-import { overview as adminOverview } from '@/routes/admin';
 import { index as lobbyIndex } from '@/routes/lobby';
 import { accountSettings, profile } from '@/routes/player';
 import { index as walletIndex } from '@/routes/wallet';
@@ -192,13 +193,6 @@ function UserMenu({ user }: { user: User }) {
                         <CreditCard /> Account settings
                     </Link>
                 </DropdownMenuItem>
-                {user.role === 'admin' && (
-                    <DropdownMenuItem asChild>
-                        <Link href={adminOverview()} className="cursor-pointer">
-                            <Shield /> Back to admin console
-                        </Link>
-                    </DropdownMenuItem>
-                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     className="cursor-pointer"
@@ -334,7 +328,10 @@ function MobileTabBar({ onMore }: { onMore: () => void }) {
 
 export default function PlayerLayout({ children }: { children: ReactNode }) {
     const [menuOpen, setMenuOpen] = useState(false);
+    const { auth } = usePage<{ auth: { user: User } }>().props;
     const shell = usePlayerShell();
+    useCasinoSync();
+    useRealtimeFeed(auth.user.id);
     const nav = buildNav(shell.unread);
     const { component } = usePage();
     const wide = component.startsWith('games/');
