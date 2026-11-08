@@ -8,8 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { register } from '@/routes';
+import { create as passwordAppeal } from '@/routes/password-appeal';
 import { store } from '@/routes/login';
-import PasskeyVerify from '@/components/passkey-verify';
+import PasskeySignInButton from '@/components/passkey-sign-in-button';
 
 type Props = {
     status?: string;
@@ -19,8 +20,6 @@ export default function Login({ status }: Props) {
     return (
         <>
             <Head title="Log in" />
-
-            <PasskeyVerify />
 
             <Form
                 {...store.form()}
@@ -47,17 +46,29 @@ export default function Login({ status }: Props) {
                             </div>
 
                             <div className="grid gap-2">
-                                <div className="flex items-center">
+                                <div className="flex items-center justify-between">
                                     <Label htmlFor="password">Password</Label>
+                                    <TextLink
+                                        href={passwordAppeal()}
+                                        className="text-xs"
+                                        tabIndex={6}
+                                    >
+                                        Forgot password?
+                                    </TextLink>
                                 </div>
-                                <PasswordInput
-                                    id="password"
-                                    name="password"
-                                    required
-                                    tabIndex={2}
-                                    autoComplete="current-password"
-                                    placeholder="Password"
-                                />
+                                <div className="flex flex-wrap items-start gap-2">
+                                    <div className="min-w-0 flex-1">
+                                        <PasswordInput
+                                            id="password"
+                                            name="password"
+                                            required
+                                            tabIndex={2}
+                                            autoComplete="current-password"
+                                            placeholder="Password"
+                                        />
+                                    </div>
+                                    <PasskeySignInButton />
+                                </div>
                                 <InputError message={errors.password} />
                             </div>
 
@@ -103,5 +114,5 @@ export default function Login({ status }: Props) {
 
 Login.layout = {
     title: 'Welcome back',
-    description: 'Enter your username and password to join the tables',
+    description: 'Sign in with your username and password, or use a passkey.',
 };

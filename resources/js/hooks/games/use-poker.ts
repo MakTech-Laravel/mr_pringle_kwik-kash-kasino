@@ -5,7 +5,7 @@ import { formatSignedCredits } from '@/lib/format';
 import type { PlayingCardData } from '@/types/casino';
 
 /*
- * DEMO poker state machine (2–6 players, host seated separately).
+ * Poker state machine (2–6 players, host seated separately).
  * Simplified betting (50 ante, no blinds). Showdown winners follow a fixed
  * script: there is NO hand evaluation in the browser. The real engine, hand
  * ranking and settlement are server-side.
@@ -312,7 +312,7 @@ function reducer(state: State, action: Action): State {
     return afterAction(state, players, i, currentBet);
 }
 
-/** Deterministic bot choice so the demo replays the same way. */
+/** Deterministic bot choice so the table replays the same way. */
 function botChoice(state: State): { kind: Kind; raiseTo?: number } {
     const p = state.players[state.turn];
     const toCall = state.currentBet - p.bet;
@@ -399,7 +399,7 @@ export function usePoker({ human, username, balance }: Options) {
                 () =>
                     toast(
                         `${net >= 0 ? 'You won' : 'You lost'} ${formatSignedCredits(net)}`,
-                        { description: 'Demo wallet only, not saved' },
+                        { description: 'Table balance only' },
                     ),
                 0,
             );

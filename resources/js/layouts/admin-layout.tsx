@@ -15,6 +15,7 @@ import {
     Upload,
     Users,
     Wallet,
+    LifeBuoy,
     Radio,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -54,6 +55,7 @@ import {
     sessions,
     wallets,
 } from '@/routes/admin';
+import { index as passwordAppeals } from '@/routes/admin/password-appeals';
 import { index as realtimeIndex } from '@/routes/admin/realtime';
 import type { User } from '@/types';
 
@@ -64,7 +66,7 @@ type AdminNavItem = {
     badge?: number;
 };
 
-/** Pending counts are DEMO values; the backend phase supplies real ones. */
+/** Pending counts are placeholder values; the backend phase supplies real ones. */
 const control: AdminNavItem[] = [
     { title: 'Overview', href: overview().url, icon: LayoutGrid },
     { title: 'Players', href: players().url, icon: Users },
@@ -79,6 +81,7 @@ const control: AdminNavItem[] = [
 
 const account: AdminNavItem[] = [
     { title: 'Notifications', href: notifications().url, icon: Bell, badge: 4 },
+    { title: 'Password appeals', href: passwordAppeals().url, icon: LifeBuoy },
     { title: 'Profile & settings', href: profile().url, icon: Settings },
     { title: 'Realtime test', href: realtimeIndex().url, icon: Radio },
 ];
@@ -112,6 +115,11 @@ function NavList({
     onNavigate?: () => void;
 }) {
     const { currentUrl } = useCurrentUrl();
+    const { pendingAppeals } = usePage<{ pendingAppeals?: number }>().props;
+
+    /** Live count for password appeals; the other badges are placeholder values. */
+    const badgeFor = (item: AdminNavItem) =>
+        item.href === passwordAppeals().url ? pendingAppeals : item.badge;
 
     const render = (item: AdminNavItem) => {
         const active =
@@ -141,9 +149,9 @@ function NavList({
                     className={cn('size-5 shrink-0', active && 'text-gold')}
                 />
                 {!collapsed && <span className="flex-1">{item.title}</span>}
-                {!collapsed && !!item.badge && (
+                {!collapsed && !!badgeFor(item) && (
                     <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-crimson px-1 text-[11px] font-semibold text-white">
-                        {item.badge}
+                        {badgeFor(item)}
                     </span>
                 )}
             </Link>

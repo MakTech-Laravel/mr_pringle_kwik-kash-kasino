@@ -31,7 +31,7 @@ export default function Lobby() {
                 <PageHeader
                     eyebrow="Casino lobby"
                     title="Choose your game"
-                    description="Explore available casino sessions. All availability shown is illustrative."
+                    description="Explore available casino sessions."
                     actions={
                         <StatusPill tone="success">Casino open</StatusPill>
                     }

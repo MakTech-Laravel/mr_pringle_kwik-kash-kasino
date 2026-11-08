@@ -102,9 +102,7 @@ export default function GameHistory() {
                         <ActionButton
                             look="outline"
                             className="h-10 px-4 text-xs"
-                            onClick={() =>
-                                toast('History export started (demo)')
-                            }
+                            onClick={() => toast('History export started')}
                         >
                             <Download /> Export history
                         </ActionButton>
@@ -156,7 +154,7 @@ export default function GameHistory() {
                             {selected && gameName[selected.game]}
                         </DialogTitle>
                         <DialogDescription>
-                            Illustrative net result per player (demo data).
+                            Net result per player.
                         </DialogDescription>
                     </DialogHeader>
                     <ul className="divide-y divide-border">

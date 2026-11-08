@@ -408,8 +408,7 @@ export default function PlayerLayout({ children }: { children: ReactNode }) {
                         Kwik Kash Kasino · Player panel
                     </span>
                     <span>
-                        Illustrative prototype. Virtual credits have no
-                        real-world value.
+                        Virtual credits only. No real money is involved.
                     </span>
                 </footer>
             </div>

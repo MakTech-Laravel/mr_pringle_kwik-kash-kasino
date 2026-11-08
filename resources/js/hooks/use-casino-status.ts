@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
 /**
- * DEMO STATE: casino open/closed switch shared between the admin console and
+ * casino open/closed switch shared between the admin console and
  * the player panel inside one browser tab. In-memory only (never persisted).
  * Replace with an Inertia prop + Reverb channel in the backend phase.
  */

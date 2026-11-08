@@ -1,5 +1,5 @@
 /**
- * DEMO DATA ONLY — deterministic fixtures mirroring the Figma exports.
+ * Deterministic fixtures mirroring the Figma exports.
  * Nothing here is persisted. Replace each export with an API/Inertia prop
  * (and Reverb updates) in the backend integration phase; component props
  * are typed by `@/types/casino`, not by this file.
@@ -15,7 +15,7 @@ import type {
     WalletTransaction,
 } from '@/types/casino';
 
-export const demoWallet = {
+export const playerWallet = {
     balance: 12500,
     pendingCashIn: 5000,
     pendingCashOut: 0,
@@ -25,7 +25,7 @@ export const demoWallet = {
     totalLosses: 9750,
 };
 
-export const demoCasino = {
+export const casinoSummary = {
     open: true,
     liveTables: 3,
 };
@@ -37,7 +37,7 @@ export const gameSessions: GameSession[] = [
         game: 'poker',
         title: 'Multiplayer Poker',
         hostName: 'Casino Host',
-        hostUsername: 'demo_admin',
+        hostUsername: 'admin',
         seated: 4,
         capacity: 6,
         status: 'waiting-players',
@@ -67,7 +67,7 @@ export const gameSessions: GameSession[] = [
         game: 'poker',
         title: 'Multiplayer Poker',
         hostName: 'Casino Host',
-        hostUsername: 'demo_admin',
+        hostUsername: 'admin',
         seated: 6,
         capacity: 6,
         status: 'in-progress',
@@ -563,7 +563,7 @@ export const adminSessions: GameSession[] = [
         game: 'blackjack',
         title: 'Midnight Table',
         hostName: 'James Dalton',
-        hostUsername: 'demo_admin',
+        hostUsername: 'admin',
         seated: 5,
         capacity: 6,
         status: 'active',
@@ -574,7 +574,7 @@ export const adminSessions: GameSession[] = [
         game: 'poker',
         title: 'High Roller Room',
         hostName: 'James Dalton',
-        hostUsername: 'demo_admin',
+        hostUsername: 'admin',
         seated: 6,
         capacity: 6,
         status: 'active',
@@ -585,7 +585,7 @@ export const adminSessions: GameSession[] = [
         game: 'roulette',
         title: 'Red Velvet',
         hostName: 'James Dalton',
-        hostUsername: 'demo_admin',
+        hostUsername: 'admin',
         seated: 7,
         capacity: 10,
         status: 'active',
@@ -596,7 +596,7 @@ export const adminSessions: GameSession[] = [
         game: 'poker',
         title: 'The Gold Room',
         hostName: 'James Dalton',
-        hostUsername: 'demo_admin',
+        hostUsername: 'admin',
         seated: 2,
         capacity: 6,
         status: 'waiting-players',
@@ -606,7 +606,7 @@ export const adminSessions: GameSession[] = [
         game: 'blackjack',
         title: 'Early Birds',
         hostName: 'James Dalton',
-        hostUsername: 'demo_admin',
+        hostUsername: 'admin',
         seated: 4,
         capacity: 6,
         status: 'completed',

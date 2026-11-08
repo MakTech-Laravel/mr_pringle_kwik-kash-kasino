@@ -1,5 +1,5 @@
 import { Form, Head, Link, router, usePage } from '@inertiajs/react';
-import { LogOut, Shield } from 'lucide-react';
+import { Fingerprint, LogOut, Shield } from 'lucide-react';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import ActionButton from '@/components/casino/action-button';
 import PageHeader from '@/components/casino/page-header';
@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { logout } from '@/routes';
 import { profile } from '@/routes/player';
+import { edit as editSecurity } from '@/routes/security';
 import type { Auth } from '@/types';
 
 /** Real password change (Fortify-backed SecurityController), styled per Figma. */
@@ -116,10 +117,28 @@ export default function AccountSettings() {
                                 </dd>
                             </div>
                         </dl>
+                        <div className="mt-5 rounded-lg border border-border p-4">
+                            <p className="flex items-center gap-2 text-xs font-semibold text-ink">
+                                <Fingerprint className="size-4 text-gold" />
+                                Two-factor and passkeys
+                            </p>
+                            <p className="mt-1 text-[11px] text-ink-muted">
+                                Add an authenticator app or a passkey so you can
+                                recover and sign in without relying on a
+                                password alone.
+                            </p>
+                            <ActionButton
+                                asChild
+                                look="outline"
+                                className="mt-3 h-10 w-full text-xs"
+                            >
+                                <Link href={editSecurity()}>Manage</Link>
+                            </ActionButton>
+                        </div>
                         <ActionButton
                             asChild
                             look="outline"
-                            className="mt-6 h-11 w-full"
+                            className="mt-4 h-11 w-full"
                         >
                             <Link href={profile()}>Back to profile</Link>
                         </ActionButton>

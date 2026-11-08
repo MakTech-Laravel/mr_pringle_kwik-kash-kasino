@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import CreditMovementChart from '@/components/casino/credit-movement-chart';
 import ActionButton from '@/components/casino/action-button';
 import StatCard from '@/components/casino/stat-card';
 import StatusPill from '@/components/casino/status-pill';
@@ -103,7 +104,6 @@ export default function Overview() {
         month: 'long',
         year: 'numeric',
     });
-    const maxBar = Math.max(...adminOverview.movement.map((m) => m.in));
 
     return (
         <>
@@ -170,7 +170,7 @@ export default function Overview() {
                                         Credit movement
                                     </h2>
                                     <p className="mt-1 text-[11px] text-ink-muted">
-                                        Illustrative data · Last 7 days
+                                        Last 7 days
                                     </p>
                                 </div>
                                 <Link
@@ -191,35 +191,10 @@ export default function Overview() {
                                     Credits out
                                 </span>
                             </div>
-                            <div
-                                className="mt-4 flex h-52 items-end justify-around gap-2 border-b border-border"
-                                role="img"
-                                aria-label="Bar chart of credits in and out for the last 7 days"
-                            >
-                                {adminOverview.movement.map((m, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex flex-1 flex-col items-center gap-2"
-                                    >
-                                        <div className="flex h-44 items-end gap-1">
-                                            <span
-                                                className="w-2.5 rounded-t-sm bg-gold sm:w-3.5"
-                                                style={{
-                                                    height: `${(m.in / maxBar) * 100}%`,
-                                                }}
-                                            />
-                                            <span
-                                                className="w-2.5 rounded-t-sm bg-crimson sm:w-3.5"
-                                                style={{
-                                                    height: `${(m.out / maxBar) * 100}%`,
-                                                }}
-                                            />
-                                        </div>
-                                        <span className="pb-2 text-[10px] text-ink-muted">
-                                            {m.day}
-                                        </span>
-                                    </div>
-                                ))}
+                            <div className="mt-4">
+                                <CreditMovementChart
+                                    data={adminOverview.movement}
+                                />
                             </div>
                         </section>
 
@@ -409,7 +384,7 @@ export default function Overview() {
                         <AlertDialogDescription>
                             {confirm
                                 ? 'Players will be able to join hosted sessions again.'
-                                : 'Players will see the "Casino closed" screen and cannot join new sessions. Demo only: this resets when you reload.'}
+                                : 'Players will see the "Casino closed" screen and cannot join new sessions. The change applies to everyone right away.'}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

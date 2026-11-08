@@ -17,7 +17,7 @@ type Props = {
 };
 
 /**
- * "Showing 1–6 of 1,284" with page links. DEMO: the page changes state only;
+ * "Showing 1–6 of 1,284" with page links. the page changes state only;
  * the fixture rows do not change between pages.
  */
 export default function PaginationBar({

@@ -18,7 +18,7 @@ const ranks: Rank[] = [
 ];
 
 /**
- * DEMO ONLY: small deterministic PRNG so the same seed always deals the same
+ * small deterministic PRNG so the same seed always deals the same
  * cards. Real games must deal server-side with a secure RNG.
  */
 export function seededRandom(seed: number): () => number {
