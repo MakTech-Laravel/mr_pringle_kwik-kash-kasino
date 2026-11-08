@@ -9,35 +9,36 @@ import {
     index as confirmOptions,
     store as confirmStore,
 } from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyConfirmationController';
-import PasskeyVerify from '@/components/passkey-verify';
+import PasskeySignInButton from '@/components/passkey-sign-in-button';
 
 export default function ConfirmPassword() {
     return (
         <>
             <Head title="Confirm password" />
 
-            <PasskeyVerify
-                routes={{
-                    options: confirmOptions(),
-                    submit: confirmStore(),
-                }}
-                label="Confirm with passkey"
-                loadingLabel="Confirming..."
-                separator="Or confirm with password"
-            />
-
             <Form {...store.form()} resetOnSuccess={['password']}>
                 {({ processing, errors }) => (
                     <div className="space-y-6">
                         <div className="grid gap-2">
                             <Label htmlFor="password">Password</Label>
-                            <PasswordInput
-                                id="password"
-                                name="password"
-                                placeholder="Password"
-                                autoComplete="current-password"
-                                autoFocus
-                            />
+                            <div className="flex flex-wrap items-start gap-2">
+                                <div className="min-w-0 flex-1">
+                                    <PasswordInput
+                                        id="password"
+                                        name="password"
+                                        placeholder="Password"
+                                        autoComplete="current-password"
+                                        autoFocus
+                                    />
+                                </div>
+                                <PasskeySignInButton
+                                    routes={{
+                                        options: confirmOptions(),
+                                        submit: confirmStore(),
+                                    }}
+                                    label="Confirm with a passkey"
+                                />
+                            </div>
 
                             <InputError message={errors.password} />
                         </div>
