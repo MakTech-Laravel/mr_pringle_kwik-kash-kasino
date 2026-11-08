@@ -1,12 +1,14 @@
+export type UserRole = 'player' | 'admin';
+
 export type User = {
     id: number;
     name: string;
-    email: string;
-    avatar?: string;
-    email_verified_at: string | null;
-    two_factor_enabled?: boolean;
+    username: string;
+    role: UserRole;
+    playerCode: string;
     created_at: string;
-    updated_at: string;
+    avatar?: string;
+    two_factor_enabled?: boolean;
     [key: string]: unknown;
 };
 

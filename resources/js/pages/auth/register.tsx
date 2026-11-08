@@ -27,35 +27,23 @@ export default function Register({ passwordRules }: Props) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="username">Username</Label>
                                 <Input
-                                    id="name"
+                                    id="username"
                                     type="text"
                                     required
                                     autoFocus
                                     tabIndex={1}
-                                    autoComplete="name"
-                                    name="name"
-                                    placeholder="Full name"
+                                    autoComplete="username"
+                                    autoCapitalize="none"
+                                    name="username"
+                                    placeholder="Choose a username"
                                 />
-                                <InputError
-                                    message={errors.name}
-                                    className="mt-2"
-                                />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    required
-                                    tabIndex={2}
-                                    autoComplete="email"
-                                    name="email"
-                                    placeholder="email@example.com"
-                                />
-                                <InputError message={errors.email} />
+                                <p className="text-xs text-muted-foreground">
+                                    3 to 30 letters, numbers or underscores. No
+                                    email or phone needed.
+                                </p>
+                                <InputError message={errors.username} />
                             </div>
 
                             <div className="grid gap-2">
@@ -115,6 +103,6 @@ export default function Register({ passwordRules }: Props) {
 }
 
 Register.layout = {
-    title: 'Create an account',
-    description: 'Enter your details below to create your account',
+    title: 'Create your account',
+    description: 'Pick a username and password to get started',
 };

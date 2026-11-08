@@ -12,6 +12,7 @@
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
+    --font-display: 'Cinzel', 'Times New Roman', Georgia, serif;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -59,77 +60,65 @@
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
+
+    /* Kwik Kash Kasino brand tokens (sampled from the Figma exports) */
+    --color-gold: #d6ad50;
+    --color-gold-light: #e4c476;
+    --color-crimson: #a9272c;
+    --color-crimson-bright: #c63a40;
+    --color-success: #2e9c70;
+    --color-success-light: #6fc9a5;
+    --color-warning: #e0a63a;
+    --color-danger-light: #d9676c;
+    --color-surface: #171112;
+    --color-surface-2: #1a1415;
+    --color-surface-3: #211a1b;
+    --color-felt: #0f5a3f;
+    --color-felt-dark: #0a3f2c;
+    --color-ink: #f5f0e9;
+    --color-ink-muted: #a99b95;
 }
 
-:root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.87 0 0);
-    --chart-1: oklch(0.646 0.222 41.116);
-    --chart-2: oklch(0.6 0.118 184.704);
-    --chart-3: oklch(0.398 0.07 227.392);
-    --chart-4: oklch(0.828 0.189 84.429);
-    --chart-5: oklch(0.769 0.188 70.08);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.87 0 0);
-}
-
+/*
+ * The product is dark-only: the Figma exports have no light variant, so both
+ * :root and .dark resolve to the same Kwik Kash palette.
+ */
+:root,
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.145 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.145 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.985 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.396 0.141 25.723);
-    --destructive-foreground: oklch(0.637 0.237 25.331);
-    --border: oklch(0.269 0 0);
-    --input: oklch(0.269 0 0);
-    --ring: oklch(0.439 0 0);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.985 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(0.269 0 0);
-    --sidebar-ring: oklch(0.439 0 0);
+    --background: #120f10;
+    --foreground: #f5f0e9;
+    --card: #171112;
+    --card-foreground: #f5f0e9;
+    --popover: #1a1415;
+    --popover-foreground: #f5f0e9;
+    --primary: #a9272c;
+    --primary-foreground: #fff7f0;
+    --secondary: #211a1b;
+    --secondary-foreground: #f5f0e9;
+    --muted: #211a1b;
+    --muted-foreground: #a99b95;
+    --accent: #2a1d1e;
+    --accent-foreground: #f5f0e9;
+    --destructive: #a9272c;
+    --destructive-foreground: #f5f0e9;
+    --border: rgb(245 240 233 / 0.1);
+    --input: rgb(245 240 233 / 0.14);
+    --ring: #d6ad50;
+    --chart-1: #d6ad50;
+    --chart-2: #a9272c;
+    --chart-3: #2e9c70;
+    --chart-4: #e4c476;
+    --chart-5: #d9676c;
+    --radius: 0.625rem;
+    --sidebar: #171112;
+    --sidebar-foreground: #f5f0e9;
+    --sidebar-primary: #a9272c;
+    --sidebar-primary-foreground: #fff7f0;
+    --sidebar-accent: #2a1d1e;
+    --sidebar-accent-foreground: #f5f0e9;
+    --sidebar-border: rgb(214 173 80 / 0.16);
+    --sidebar-ring: #d6ad50;
+    color-scheme: dark;
 }
 
 @layer base {
@@ -137,7 +126,69 @@
         @apply border-border;
     }
 
+    html {
+        background-color: #120f10;
+    }
+
     body {
         @apply bg-background text-foreground;
+        overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    .font-display {
+        font-family: var(--font-display);
+    }
+}
+
+@layer components {
+    /* Gold, letter-spaced section label above page titles */
+    .kk-eyebrow {
+        @apply text-[11px] font-semibold tracking-[0.22em] text-gold uppercase;
+    }
+
+    /* Serif small-caps heading used across every page title */
+    .kk-title {
+        font-family: var(--font-display);
+        font-variant: small-caps;
+        @apply font-medium tracking-wide;
+    }
+
+    /* Standard bordered panel */
+    .kk-panel {
+        @apply rounded-xl border border-border bg-surface;
+        background-image: linear-gradient(
+            160deg,
+            rgb(169 39 44 / 0.06),
+            transparent 55%
+        );
+    }
+
+    /* Hero panel with gold border and crimson glow (balance cards) */
+    .kk-hero {
+        @apply rounded-xl border border-gold/35 bg-surface-2;
+        background-image:
+            radial-gradient(
+                ellipse at 85% 0%,
+                rgb(169 39 44 / 0.28),
+                transparent 55%
+            ),
+            linear-gradient(160deg, rgb(169 39 44 / 0.1), transparent 70%);
+    }
+
+    /* Felt surface for the three game tables */
+    .kk-felt {
+        background: radial-gradient(
+            ellipse at 50% 40%,
+            #146b4a,
+            #0b4a33 62%,
+            #083524
+        );
+    }
+
+    .kk-safe-bottom {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
     }
 }

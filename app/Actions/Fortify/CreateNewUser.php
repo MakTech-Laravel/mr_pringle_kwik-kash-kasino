@@ -13,20 +13,22 @@ class CreateNewUser implements CreatesNewUsers
     use PasswordValidationRules, ProfileValidationRules;
 
     /**
-     * Validate and create a newly registered user.
+     * Validate and create a newly registered player (username + password only).
      *
      * @param  array<string, string>  $input
      */
     public function create(array $input): User
     {
+        $input['username'] = strtolower(trim($input['username'] ?? ''));
+
         Validator::make($input, [
-            ...$this->profileRules(),
+            'username' => $this->usernameRules(),
             'password' => $this->passwordRules(),
         ])->validate();
 
         return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
+            'name' => $input['username'],
+            'username' => $input['username'],
             'password' => $input['password'],
         ]);
     }
