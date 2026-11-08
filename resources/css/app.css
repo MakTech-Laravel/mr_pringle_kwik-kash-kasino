@@ -192,3 +192,115 @@
         padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
     }
 }
+
+/*
+ * Scrollbars follow the theme everywhere: slim, dark track, gold thumb.
+ */
+@layer base {
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: rgb(214 173 80 / 0.35) transparent;
+    }
+
+    *::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: rgb(214 173 80 / 0.28);
+        border: 2px solid transparent;
+        border-radius: 999px;
+        background-clip: content-box;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background-color: rgb(214 173 80 / 0.55);
+    }
+
+    *::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+
+    html {
+        scrollbar-color: rgb(214 173 80 / 0.4) #120f10;
+    }
+}
+
+/*
+ * Toasts: dark surface, gold hairline, a coloured accent bar per type.
+ */
+@layer components {
+    .kk-toast {
+        position: relative;
+        overflow: hidden;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.875rem 1rem 0.875rem 1.125rem;
+        border-radius: 0.75rem;
+        border: 1px solid rgb(214 173 80 / 0.22);
+        background-image: linear-gradient(
+            150deg,
+            rgb(169 39 44 / 0.14),
+            transparent 60%
+        );
+        box-shadow:
+            0 18px 40px rgb(0 0 0 / 0.55),
+            inset 0 1px 0 rgb(245 240 233 / 0.04);
+        font-family: var(--font-sans);
+    }
+
+    .kk-toast::before {
+        content: '';
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 3px;
+        background: var(--color-gold);
+    }
+
+    .kk-toast[data-type='success']::before {
+        background: var(--color-success);
+    }
+
+    .kk-toast[data-type='error']::before {
+        background: var(--color-crimson-bright);
+    }
+
+    .kk-toast[data-type='warning']::before {
+        background: var(--color-warning);
+    }
+
+    .kk-toast [data-title] {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--color-ink);
+    }
+
+    .kk-toast [data-description] {
+        margin-top: 0.125rem;
+        font-size: 0.75rem;
+        color: var(--color-ink-muted);
+    }
+
+    .kk-toast [data-icon] {
+        color: var(--color-gold);
+    }
+
+    .kk-toast[data-type='success'] [data-icon] {
+        color: var(--color-success-light);
+    }
+
+    .kk-toast[data-type='error'] [data-icon] {
+        color: var(--color-danger-light);
+    }
+
+    .kk-toast [data-close-button] {
+        border-color: rgb(245 240 233 / 0.12);
+        background: var(--color-surface-3);
+        color: var(--color-ink-muted);
+    }
+}

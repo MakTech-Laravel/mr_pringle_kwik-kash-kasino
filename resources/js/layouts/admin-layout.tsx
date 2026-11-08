@@ -16,11 +16,12 @@ import {
     Users,
     Wallet,
     LifeBuoy,
-    Radio,
+    ShieldCheck,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import BrandLogo from '@/components/casino/brand-logo';
+import CasinoToggleDialog from '@/components/casino/casino-toggle-dialog';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -36,11 +37,16 @@ import {
     SheetHeader,
     SheetTitle,
 } from '@/components/ui/sheet';
-import { useCasinoOpen } from '@/hooks/use-casino-status';
+import {
+    requestCasinoChange,
+    useCasinoOpen,
+    useCasinoSync,
+} from '@/hooks/use-casino-status';
 import { useCurrentUrl } from '@/hooks/use-current-url';
+import { useRealtimeFeed } from '@/hooks/use-realtime-feed';
 import { initialsOf } from '@/lib/format';
 import { cn } from '@/lib/utils';
-import { dashboard, logout } from '@/routes';
+import { logout } from '@/routes';
 import {
     activity,
     cashIn,
@@ -55,8 +61,8 @@ import {
     sessions,
     wallets,
 } from '@/routes/admin';
+import { index as administratorsIndex } from '@/routes/admin/administrators';
 import { index as passwordAppeals } from '@/routes/admin/password-appeals';
-import { index as realtimeIndex } from '@/routes/admin/realtime';
 import type { User } from '@/types';
 
 type AdminNavItem = {
@@ -81,9 +87,13 @@ const control: AdminNavItem[] = [
 
 const account: AdminNavItem[] = [
     { title: 'Notifications', href: notifications().url, icon: Bell, badge: 4 },
+    {
+        title: 'Administrators',
+        href: administratorsIndex().url,
+        icon: ShieldCheck,
+    },
     { title: 'Password appeals', href: passwordAppeals().url, icon: LifeBuoy },
     { title: 'Profile & settings', href: profile().url, icon: Settings },
-    { title: 'Realtime test', href: realtimeIndex().url, icon: Radio },
 ];
 
 const allItems = [...control, ...account];
@@ -98,6 +108,10 @@ function useCrumb(): string {
 
     if (currentUrl.startsWith(ledger().url)) {
         return 'Transaction ledger';
+    }
+
+    if (currentUrl.startsWith('/admin/realtime')) {
+        return 'Realtime test';
     }
 
     if (currentUrl.startsWith('/admin/sessions/')) {
@@ -186,6 +200,8 @@ function signOut() {
 export default function AdminLayout({ children }: { children: ReactNode }) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const casinoOpen = useCasinoOpen();
+    useCasinoSync();
+    useRealtimeFeed(auth.user.id);
     const crumb = useCrumb();
     const [collapsed, setCollapsed] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -306,12 +322,24 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                         </span>
                     </nav>
                     <div className="ml-auto flex items-center gap-2 sm:gap-3">
-                        <span
-                            className={cn(
-                                'hidden items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium sm:inline-flex',
+                        <button
+                            type="button"
+                            onClick={() => requestCasinoChange(!casinoOpen)}
+                            aria-label={
                                 casinoOpen
-                                    ? 'border-success/30 text-success-light'
-                                    : 'border-crimson/40 text-danger-light',
+                                    ? 'Casino online. Click to close the casino'
+                                    : 'Casino offline. Click to open the casino'
+                            }
+                            title={
+                                casinoOpen
+                                    ? 'Click to close the casino'
+                                    : 'Click to open the casino'
+                            }
+                            className={cn(
+                                'hidden cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:outline-none sm:inline-flex',
+                                casinoOpen
+                                    ? 'border-success/30 text-success-light hover:bg-success/10'
+                                    : 'border-crimson/40 text-danger-light hover:bg-crimson/10',
                             )}
                         >
                             <span
@@ -319,7 +347,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                                 className="size-2 rounded-full bg-current"
                             />
                             {casinoOpen ? 'Casino online' : 'Casino offline'}
-                        </span>
+                        </button>
                         <Link
                             href={notifications()}
                             aria-label="Notifications, 4 unread"
@@ -368,14 +396,6 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                                         <Settings /> Profile & settings
                                     </Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
-                                    <Link
-                                        href={dashboard()}
-                                        className="cursor-pointer"
-                                    >
-                                        <Users /> Open player view
-                                    </Link>
-                                </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                     className="cursor-pointer"
@@ -390,6 +410,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 <main className="mx-auto w-full max-w-[1560px] px-4 pt-6 pb-12 sm:px-6 lg:px-8 lg:pt-9">
                     {children}
                 </main>
+                <CasinoToggleDialog />
             </div>
         </div>
     );

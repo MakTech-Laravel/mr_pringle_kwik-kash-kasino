@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\AppealStatus;
 use App\Http\Controllers\Controller;
 use App\Models\PasswordAppeal;
+use App\Support\AdminAudit;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -49,7 +50,7 @@ class PasswordAppealController extends Controller
         abort_unless($this->canAct($appeal), 422, 'This appeal is closed or has no matching account.');
 
         $token = $appeal->issueResetToken();
-        $this->markReviewed($request, $appeal);
+        $this->markReviewed($request, $appeal, 'appeal.link', 'Reset link created');
 
         return response()->json([
             'url' => route('password-appeal.reset', $token),
@@ -69,7 +70,7 @@ class PasswordAppealController extends Controller
 
         $appeal->user->forceFill(['password' => $password, 'remember_token' => null])->save();
         $appeal->forceFill(['status' => AppealStatus::Resolved, 'reset_token_hash' => null])->save();
-        $this->markReviewed($request, $appeal);
+        $this->markReviewed($request, $appeal, 'appeal.temporary-password', 'Temporary password set');
 
         return response()->json(['password' => $password]);
     }
@@ -89,7 +90,7 @@ class PasswordAppealController extends Controller
         abort_if($appeal->status === AppealStatus::Unverified, 422);
 
         $appeal->forceFill(['status' => $status, 'reset_token_hash' => null])->save();
-        $this->markReviewed($request, $appeal);
+        $this->markReviewed($request, $appeal, 'appeal.'.$status->value, 'Appeal '.$status->value);
 
         return back();
     }
@@ -101,8 +102,10 @@ class PasswordAppealController extends Controller
             && ! $appeal->user->isAdmin();
     }
 
-    private function markReviewed(Request $request, PasswordAppeal $appeal): void
+    private function markReviewed(Request $request, PasswordAppeal $appeal, string $action, string $description): void
     {
         $appeal->forceFill(['reviewed_by' => $request->user()->id, 'reviewed_at' => now()])->save();
+
+        AdminAudit::record($request->user(), $action, $description.': @'.$appeal->username, $appeal, ['username' => $appeal->username]);
     }
 }

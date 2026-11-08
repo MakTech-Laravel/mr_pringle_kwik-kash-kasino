@@ -107,7 +107,10 @@ test('a different session is not affected by a seat held elsewhere', function ()
 test('every player page renders for a signed-in player', function (string $routeName) {
     $player = User::factory()->create();
 
-    $this->actingAs($player)->get(route($routeName))->assertOk();
+    $this->actingAs($player)
+        ->withSession(['auth.password_confirmed_at' => time()])
+        ->get(route($routeName))
+        ->assertOk();
 })->with([
     'lobby.index',
     'lobby.sessions',
@@ -125,6 +128,7 @@ test('players can change their password from the account settings page', functio
     $player = User::factory()->create();
 
     $this->actingAs($player)
+        ->withSession(['auth.password_confirmed_at' => time()])
         ->put(route('user-password.update'), [
             'current_password' => 'password',
             'password' => 'a-new-password-1',
@@ -146,7 +150,10 @@ test('game tables only accept known games and render for players', function () {
 
 test('every admin page renders for an admin and stays forbidden for players', function (string $routeName) {
     $this->actingAs(User::factory()->create())->get(route($routeName))->assertForbidden();
-    $this->actingAs(User::factory()->admin()->create())->get(route($routeName))->assertOk();
+    $this->actingAs(User::factory()->admin()->create())
+        ->withSession(['auth.password_confirmed_at' => time()])
+        ->get(route($routeName))
+        ->assertOk();
 })->with([
     'admin.overview',
     'admin.players',

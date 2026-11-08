@@ -17,27 +17,32 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { adminActivityLog } from '@/mocks/casino';
 import type { AdminActivity } from '@/types/casino';
 
-export default function Activity() {
+const PAGE_SIZE = 10;
+
+export default function Activity({
+    activities,
+}: {
+    activities: AdminActivity[];
+}) {
     const [search, setSearch] = useState('');
     const [action, setAction] = useState('all');
     const [range, setRange] = useState('all');
     const [page, setPage] = useState(1);
     const [selected, setSelected] = useState<AdminActivity | null>(null);
 
-    const actions = [...new Set(adminActivityLog.map((a) => a.action))];
+    const actions = [...new Set(activities.map((a) => a.action))];
     const rows = useMemo(
         () =>
-            adminActivityLog.filter(
+            activities.filter(
                 (a) =>
                     `${a.id} ${a.action} ${a.record}`
                         .toLowerCase()
                         .includes(search.toLowerCase()) &&
                     (action === 'all' || a.action === action),
             ),
-        [search, action],
+        [activities, search, action],
     );
 
     const columns: Column<AdminActivity>[] = [
@@ -98,14 +103,14 @@ export default function Activity() {
                 </FilterBar>
                 <DataTable
                     columns={columns}
-                    rows={rows}
+                    rows={rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)}
                     rowKey={(a) => a.id}
                     empty="No activity matches your filters."
                     footer={
                         <PaginationBar
-                            shown={rows.length}
-                            total={1284}
-                            pageSize={5}
+                            shown={Math.min(rows.length, page * PAGE_SIZE)}
+                            total={rows.length}
+                            pageSize={PAGE_SIZE}
                             page={page}
                             onPage={setPage}
                         />
