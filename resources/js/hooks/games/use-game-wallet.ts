@@ -3,10 +3,10 @@ import { toast } from 'sonner';
 import { formatSignedCredits } from '@/lib/format';
 
 /**
- * DEMO wallet for game tables. Lives only in component state: it never
+ * Wallet for game tables. Lives only in component state: it never
  * touches the real wallet or ledger. Real settlement is server-side.
  */
-export function useDemoWallet(initial: number) {
+export function useGameWallet(initial: number) {
     const [balance, setBalance] = useState(initial);
 
     const apply = useCallback((delta: number, label?: string) => {
@@ -14,14 +14,14 @@ export function useDemoWallet(initial: number) {
 
         if (label) {
             toast(`${label} ${formatSignedCredits(delta)}`, {
-                description: 'Demo wallet only, not saved',
+                description: 'Table balance only',
             });
         }
     }, []);
 
     const announce = useCallback((label: string, net: number) => {
         toast(`${label} ${formatSignedCredits(net)}`, {
-            description: 'Demo wallet only, not saved',
+            description: 'Table balance only',
         });
     }, []);
 

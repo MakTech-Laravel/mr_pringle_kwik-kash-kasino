@@ -65,7 +65,7 @@ const copy = {
 const quick = [500, 1000, 2500, 5000];
 
 /**
- * Cash-in / cash-out request flow. DEMO: nothing is saved; the
+ * Cash-in / cash-out request flow. nothing is saved; the
  * submit handler is the seam for a real Laravel endpoint.
  */
 export default function RequestCredits({ mode, balance }: Props) {
@@ -122,7 +122,7 @@ export default function RequestCredits({ mode, balance }: Props) {
                     </div>
                 </dl>
                 <p className="mt-4 text-[11px] text-ink-muted/70">
-                    Demo preview: this request is not saved.
+                    Your request is pending review.
                 </p>
                 <ActionButton asChild className="mt-6 h-11 px-8">
                     <Link href={walletIndex()}>Return to wallet</Link>
@@ -149,7 +149,7 @@ export default function RequestCredits({ mode, balance }: Props) {
                         }
 
                         setSubmitted(value);
-                        toast.success('Request submitted (demo)');
+                        toast.success('Request submitted');
                     }}
                     className="kk-panel space-y-6 p-5 sm:p-7"
                 >

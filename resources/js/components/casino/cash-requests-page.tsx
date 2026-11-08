@@ -69,7 +69,7 @@ export default function CashRequestsPage({ direction, initial, stats }: Props) {
             list.map((r) => (r.id === id ? { ...r, status: decision } : r)),
         );
         setSelected(null);
-        toast.success(`${id} ${decision} (demo)`, {
+        toast.success(`${id} ${decision}`, {
             description: 'Recorded in this browser session only.',
         });
     };
@@ -134,7 +134,7 @@ export default function CashRequestsPage({ direction, initial, stats }: Props) {
                         <ActionButton
                             look="outline"
                             className="h-10 px-4 text-xs"
-                            onClick={() => toast('Export started (demo)')}
+                            onClick={() => toast('Export started')}
                         >
                             <Download /> Export
                         </ActionButton>

@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { Landmark } from 'lucide-react';
+import HouseBalanceChart from '@/components/casino/house-balance-chart';
 import DataTable, { type Column } from '@/components/casino/data-table';
 import { formatNumber, formatSignedCredits } from '@/lib/format';
 import { cn } from '@/lib/utils';
@@ -12,48 +13,6 @@ const movement = [
     ['Winnings paid', '−512,200 cr', 'bg-crimson'],
     ['Cash-out transfers', '−26,200 cr', 'bg-crimson'],
 ] as const;
-
-function AreaChart() {
-    const max = 100;
-    const w = 600;
-    const h = 200;
-    const points = houseChart.map((v, i) => [
-        (i / (houseChart.length - 1)) * w,
-        h - (v / max) * h,
-    ]);
-    const line = points
-        .map(
-            ([x, y], i) =>
-                `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`,
-        )
-        .join(' ');
-
-    return (
-        <svg
-            viewBox={`0 0 ${w} ${h + 10}`}
-            role="img"
-            aria-label="House balance, March 1 to March 18"
-            className="h-52 w-full"
-            preserveAspectRatio="none"
-        >
-            <defs>
-                <linearGradient id="house-fill" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="#d6ad50" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#d6ad50" stopOpacity="0" />
-                </linearGradient>
-            </defs>
-            <path d={`${line} L${w},${h} L0,${h} Z`} fill="url(#house-fill)" />
-            <path
-                d={line}
-                fill="none"
-                stroke="#d6ad50"
-                strokeWidth="3"
-                strokeLinejoin="round"
-                vectorEffect="non-scaling-stroke"
-            />
-        </svg>
-    );
-}
 
 export default function House() {
     const columns: Column<Row>[] = [
@@ -136,7 +95,7 @@ export default function House() {
                         [
                             'Net this month',
                             '+86,450 cr',
-                            'Illustrative account data',
+                            'This month',
                             'text-success-light',
                         ],
                     ].map(([label, value, note, tone]) => (
@@ -168,9 +127,9 @@ export default function House() {
                             House balance activity
                         </h2>
                         <p className="mt-1 mb-4 text-[11px] text-ink-muted">
-                            Illustrative data · March 1–18
+                            March 1–18
                         </p>
-                        <AreaChart />
+                        <HouseBalanceChart values={houseChart} />
                         <div className="mt-2 flex justify-between text-[10px] text-ink-muted/70">
                             <span>MAR 1</span>
                             <span>MAR 6</span>

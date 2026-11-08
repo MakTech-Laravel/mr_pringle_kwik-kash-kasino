@@ -4,11 +4,18 @@ import { adminSessions, gameSessions } from '@/mocks/casino';
 import type { Auth } from '@/types';
 import type { GameKind, GameSession } from '@/types/casino';
 
+export type TableMode = 'host' | 'player';
+
 /**
- * Resolves the table's session (DEMO sources) and the viewer's relationship
- * to it. Seam: replace the lookup with the session payload from the API.
+ * Resolves the table's session and the viewer's capacity at it. The server
+ * decides `mode` (players always sit; an admin joins as host or as a player,
+ * never both). Seam: replace the lookup with the session payload from the API.
  */
-export function useGameSession(game: GameKind, sessionId: string) {
+export function useGameSession(
+    game: GameKind,
+    sessionId: string,
+    mode: TableMode,
+) {
     const { auth } = usePage<{ auth: Auth }>().props;
     const casinoOpen = useCasinoOpen();
 
@@ -21,7 +28,7 @@ export function useGameSession(game: GameKind, sessionId: string) {
         game,
         title: 'Hosted table',
         hostName: 'Casino Host',
-        hostUsername: 'demo_admin',
+        hostUsername: 'admin',
         seated: 1,
         capacity: 6,
         status: 'active',
@@ -31,7 +38,8 @@ export function useGameSession(game: GameKind, sessionId: string) {
         session,
         casinoOpen,
         user: auth.user,
-        /** Hosting admins view the table with host controls and never take a seat. */
-        isHost: session.hostUsername === auth.user.username,
+        mode,
+        /** Hosting admins see host controls and never take a seat. */
+        isHost: mode === 'host',
     };
 }
