@@ -16,8 +16,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-enable opcache \
     && rm -rf /var/lib/apt/lists/*
 
-# Optional: enable when Redis / Horizon is needed (then rebuild the image)
-# RUN pecl install redis && docker-php-ext-enable redis
+# phpredis: cache, session and queue run on Redis in staging/production
+RUN pecl install redis && docker-php-ext-enable redis \
+    && rm -rf /tmp/pear
 
 # ===== 2. Install production PHP dependencies =====
 FROM php-build AS vendor
@@ -48,7 +49,16 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm config set store-dir /pnpm/store \
     && pnpm install --frozen-lockfile
 ARG VITE_APP_NAME=Laravel
-ENV VITE_APP_NAME=${VITE_APP_NAME}
+# Browser-side Reverb settings are baked into the bundle: set them as Build Variables in Coolify.
+ARG VITE_REVERB_APP_KEY
+ARG VITE_REVERB_HOST
+ARG VITE_REVERB_PORT=443
+ARG VITE_REVERB_SCHEME=https
+ENV VITE_APP_NAME=${VITE_APP_NAME} \
+    VITE_REVERB_APP_KEY=${VITE_REVERB_APP_KEY} \
+    VITE_REVERB_HOST=${VITE_REVERB_HOST} \
+    VITE_REVERB_PORT=${VITE_REVERB_PORT} \
+    VITE_REVERB_SCHEME=${VITE_REVERB_SCHEME}
 # Explicit generation makes Laravel exceptions visible before Vite runs.
 RUN php artisan wayfinder:generate --with-form -vvv
 RUN pnpm run build
