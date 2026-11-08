@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\RealtimeController;
 use App\Http\Controllers\Admin\SessionMonitorController;
 use App\Http\Controllers\GameTableController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::inertia('activity', 'admin/activity')->name('activity');
     Route::inertia('notifications', 'admin/notifications')->name('notifications');
     Route::inertia('profile', 'admin/profile')->name('profile');
+
+    Route::controller(RealtimeController::class)->prefix('realtime')->name('realtime.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('health', 'health')->name('health');
+        Route::post('ping', 'ping')->name('ping');
+        Route::post('private', 'privateTest')->name('private');
+    });
 });
 
 require __DIR__.'/settings.php';

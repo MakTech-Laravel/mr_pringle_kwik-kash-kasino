@@ -15,6 +15,7 @@ import {
     Upload,
     Users,
     Wallet,
+    Radio,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
@@ -53,6 +54,7 @@ import {
     sessions,
     wallets,
 } from '@/routes/admin';
+import { index as realtimeIndex } from '@/routes/admin/realtime';
 import type { User } from '@/types';
 
 type AdminNavItem = {
@@ -78,6 +80,7 @@ const control: AdminNavItem[] = [
 const account: AdminNavItem[] = [
     { title: 'Notifications', href: notifications().url, icon: Bell, badge: 4 },
     { title: 'Profile & settings', href: profile().url, icon: Settings },
+    { title: 'Realtime test', href: realtimeIndex().url, icon: Radio },
 ];
 
 const allItems = [...control, ...account];
