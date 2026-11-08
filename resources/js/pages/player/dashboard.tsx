@@ -14,8 +14,8 @@ import {
 } from '@/lib/sessions';
 import { cn } from '@/lib/utils';
 import {
-    demoCasino,
-    demoWallet,
+    casinoSummary,
+    playerWallet,
     gameSessions,
     recentActivity,
 } from '@/mocks/casino';
@@ -78,15 +78,15 @@ export default function Dashboard() {
                         </span>
                         {casinoOpen && (
                             <span className="border-l border-border pl-3 text-ink-muted">
-                                {demoCasino.liveTables} tables live
+                                {casinoSummary.liveTables} tables live
                             </span>
                         )}
                     </div>
                 </header>
 
                 <BalanceCard
-                    balance={demoWallet.balance}
-                    caption="Illustrative balance · Last updated just now"
+                    balance={playerWallet.balance}
+                    caption="Last updated just now"
                     actions={
                         <>
                             <ActionButton asChild className="h-11 px-5">
@@ -112,7 +112,8 @@ export default function Dashboard() {
                                     Pending cash-in
                                 </span>{' '}
                                 <span className="ml-2 font-semibold text-ink">
-                                    {formatNumber(demoWallet.pendingCashIn)} CR
+                                    {formatNumber(playerWallet.pendingCashIn)}{' '}
+                                    CR
                                 </span>
                             </p>
                             <p className="text-ink-muted">
@@ -120,7 +121,8 @@ export default function Dashboard() {
                                     Pending cash-out
                                 </span>{' '}
                                 <span className="ml-2 font-semibold text-ink">
-                                    {formatNumber(demoWallet.pendingCashOut)} CR
+                                    {formatNumber(playerWallet.pendingCashOut)}{' '}
+                                    CR
                                 </span>
                             </p>
                         </>

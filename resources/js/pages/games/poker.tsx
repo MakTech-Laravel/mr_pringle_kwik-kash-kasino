@@ -4,7 +4,7 @@ import GameShell from '@/components/games/game-shell';
 import PokerTable from '@/components/games/poker-table';
 import { useGameSession } from '@/hooks/games/use-game-session';
 import { usePoker } from '@/hooks/games/use-poker';
-import { demoWallet } from '@/mocks/casino';
+import { playerWallet } from '@/mocks/casino';
 
 export default function Poker({
     sessionId,
@@ -21,7 +21,7 @@ export default function Poker({
     const game = usePoker({
         human: !isHost,
         username: isHost ? 'Seat 1' : user.username,
-        balance: demoWallet.balance,
+        balance: playerWallet.balance,
     });
 
     if (!casinoOpen) {
@@ -47,7 +47,7 @@ export default function Poker({
                 statusTone={phase === 'waiting' ? 'danger' : 'success'}
                 isHost={isHost}
                 adminPlayer={user.role === 'admin'}
-                footnote="Demo table for 2–6 players: opponents are scripted and the showdown winner is not evaluated. Poker variant, rules and settlement are host-configured and server-side."
+                footnote="Poker for 2–6 players. Variant, rules and settlement are set by the host and run on the server."
             >
                 <PokerTable game={game} isHost={isHost} />
             </GameShell>

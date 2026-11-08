@@ -83,7 +83,7 @@ export default function BlackjackTable({ game, username, isHost }: Props) {
                         BLACKJACK
                     </p>
                     <p className="mt-2 text-[9px] tracking-[0.3em]">
-                        HOSTED TABLE · DEMO VIEW
+                        HOSTED TABLE
                     </p>
                 </div>
 
@@ -165,7 +165,7 @@ export default function BlackjackTable({ game, username, isHost }: Props) {
 
             <ActionTray>
                 <TrayStat
-                    label="Available balance (demo)"
+                    label="Available balance"
                     value={formatCredits(balance)}
                 />
 
@@ -289,7 +289,7 @@ function HostControls({ game }: { game: Game }) {
 
     return (
         <div className="flex flex-wrap items-center gap-3">
-            <StatusPill tone="gold">Host controls (demo)</StatusPill>
+            <StatusPill tone="gold">Host controls</StatusPill>
             {state.phase === 'waiting-host' && (
                 <ActionButton className="h-11 px-6" onClick={actions.open}>
                     Open betting

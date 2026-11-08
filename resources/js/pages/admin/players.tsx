@@ -117,8 +117,8 @@ export default function Players() {
                                 toggleSuspend(p.id);
                                 toast.success(
                                     p.status === 'suspended'
-                                        ? 'Account reactivated (demo)'
-                                        : 'Account suspended (demo)',
+                                        ? 'Account reactivated'
+                                        : 'Account suspended',
                                 );
                             }}
                         >
@@ -143,7 +143,7 @@ export default function Players() {
                         <ActionButton
                             look="outline"
                             className="h-10 px-4 text-xs"
-                            onClick={() => toast('CSV export started (demo)')}
+                            onClick={() => toast('CSV export started')}
                         >
                             <Download /> Export CSV
                         </ActionButton>

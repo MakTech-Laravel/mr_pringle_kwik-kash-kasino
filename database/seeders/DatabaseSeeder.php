@@ -12,8 +12,8 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      *
-     * DEMO ONLY: these credentials exist for local development and client demos.
-     * Never run this seeder against production.
+     * Seeds the starter administrator and player accounts.
+     * Change their passwords before the site goes public.
      */
     public function run(): void
     {

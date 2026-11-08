@@ -35,7 +35,7 @@ test('each role is redirected to its own home after login', function () {
         ->assertRedirect(route('admin.overview', absolute: false));
 });
 
-test('the demo seeder creates exactly one player and one admin', function () {
+test('the seeder creates exactly one player and one admin', function () {
     $this->seed(DatabaseSeeder::class);
 
     expect(User::count())->toBe(2);

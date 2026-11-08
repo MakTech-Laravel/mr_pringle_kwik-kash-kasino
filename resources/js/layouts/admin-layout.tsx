@@ -64,7 +64,7 @@ type AdminNavItem = {
     badge?: number;
 };
 
-/** Pending counts are DEMO values; the backend phase supplies real ones. */
+/** Pending counts are placeholder values; the backend phase supplies real ones. */
 const control: AdminNavItem[] = [
     { title: 'Overview', href: overview().url, icon: LayoutGrid },
     { title: 'Players', href: players().url, icon: Users },

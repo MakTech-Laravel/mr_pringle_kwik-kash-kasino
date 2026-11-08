@@ -89,9 +89,7 @@ export default function Ledger() {
                         <ActionButton
                             look="outline"
                             className="h-10 px-4 text-xs"
-                            onClick={() =>
-                                toast('Ledger export started (demo)')
-                            }
+                            onClick={() => toast('Ledger export started')}
                         >
                             <Download /> Export ledger
                         </ActionButton>

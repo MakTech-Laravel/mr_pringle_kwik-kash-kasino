@@ -17,7 +17,7 @@ export function formatSignedCredits(value: number): string {
     return `${sign}${formatNumber(Math.abs(value))} CR`;
 }
 
-/** Initials for avatars: "CasinoPlayer01" -> "CP", "demo_player" -> "DP" */
+/** Initials for avatars: "CasinoPlayer01" -> "CP", "admin" -> "A" */
 export function initialsOf(name: string): string {
     const parts = name
         .replace(/[_\-.]+/g, ' ')

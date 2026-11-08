@@ -229,10 +229,7 @@ export default function RouletteTable({ game, isHost }: Props) {
 
             <ActionTray>
                 <div className="grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-3">
-                    <TrayStat
-                        label="Balance (demo)"
-                        value={formatCredits(balance)}
-                    />
+                    <TrayStat label="Balance" value={formatCredits(balance)} />
                     <TrayStat
                         label="Selected bets"
                         value={
@@ -251,9 +248,7 @@ export default function RouletteTable({ game, isHost }: Props) {
 
                 {isHost ? (
                     <div className="flex flex-wrap items-center gap-3">
-                        <StatusPill tone="gold">
-                            Host controls (demo)
-                        </StatusPill>
+                        <StatusPill tone="gold">Host controls</StatusPill>
                         {state.phase === 'waiting-host' && (
                             <ActionButton
                                 className="h-11 px-6"

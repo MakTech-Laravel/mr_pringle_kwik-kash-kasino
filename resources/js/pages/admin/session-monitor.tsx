@@ -284,7 +284,7 @@ export default function SessionMonitor({ sessionId }: { sessionId: string }) {
                             className="h-10 px-5 text-xs"
                             onClick={() => {
                                 setSettings(false);
-                                toast.success('Settings saved (demo)');
+                                toast.success('Settings saved');
                             }}
                         >
                             Save
@@ -301,7 +301,7 @@ export default function SessionMonitor({ sessionId }: { sessionId: string }) {
                         </AlertDialogTitle>
                         <AlertDialogDescription>
                             Players are returned to the lobby and the session
-                            moves to Game history. Demo only: nothing is saved.
+                            moves to Game history.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -309,7 +309,7 @@ export default function SessionMonitor({ sessionId }: { sessionId: string }) {
                         <AlertDialogAction
                             onClick={() => {
                                 setCompleted(true);
-                                toast.success(`${session.id} completed (demo)`);
+                                toast.success(`${session.id} completed`);
                             }}
                         >
                             Complete session

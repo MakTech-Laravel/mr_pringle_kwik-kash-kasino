@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
-import { useDemoWallet } from '@/hooks/games/use-demo-wallet';
+import { useGameWallet } from '@/hooks/games/use-game-wallet';
 
 /*
- * DEMO roulette. Winning numbers come from a fixed script so the demo is
+ * Roulette. Winning numbers come from a fixed script so the table is
  * deterministic; the browser NEVER decides real outcomes. Payouts are
- * illustrative (35:1 straight, 1:1 outside).
+ * simplified (35:1 straight, 1:1 outside).
  */
 
 export const RED_NUMBERS = new Set([
@@ -206,7 +206,7 @@ type Options = { startingBalance: number; autoHost: boolean };
 
 export function useRoulette({ startingBalance, autoHost }: Options) {
     const [state, dispatch] = useReducer(reducer, initial);
-    const wallet = useDemoWallet(startingBalance);
+    const wallet = useGameWallet(startingBalance);
     const { apply, announce, balance } = wallet;
     const settled = useRef(-1);
     const stagedTotal = sumBets(state.staged);
@@ -276,7 +276,7 @@ export function useRoulette({ startingBalance, autoHost }: Options) {
             }
         },
         clear: () => dispatch({ type: 'clear' }),
-        /** Commits staged bets and deducts them from the demo wallet. */
+        /** Commits staged bets and deducts them from the table wallet. */
         place: () => {
             if (stagedTotal === 0 || stagedTotal > wallet.balance) {
                 return;

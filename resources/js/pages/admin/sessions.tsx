@@ -77,7 +77,7 @@ export default function Sessions() {
             },
             ...list,
         ]);
-        toast.success(draft ? 'Draft saved (demo)' : 'Session created (demo)');
+        toast.success(draft ? 'Draft saved' : 'Session created');
         setName('');
         setOpen(false);
     };

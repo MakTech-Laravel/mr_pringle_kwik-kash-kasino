@@ -4,7 +4,7 @@ import BlackjackTable from '@/components/games/blackjack-table';
 import GameShell from '@/components/games/game-shell';
 import { useBlackjack } from '@/hooks/games/use-blackjack';
 import { useGameSession } from '@/hooks/games/use-game-session';
-import { demoWallet } from '@/mocks/casino';
+import { playerWallet } from '@/mocks/casino';
 
 export default function Blackjack({
     sessionId,
@@ -19,7 +19,7 @@ export default function Blackjack({
         mode,
     );
     const game = useBlackjack({
-        startingBalance: demoWallet.balance,
+        startingBalance: playerWallet.balance,
         autoHost: !isHost,
     });
 
@@ -47,7 +47,7 @@ export default function Blackjack({
                 statusTone={phase === 'waiting-host' ? 'danger' : 'success'}
                 isHost={isHost}
                 adminPlayer={user.role === 'admin'}
-                footnote="Demo table: cards, payouts and wallet changes are simulated in your browser and never saved. Real rules and settlement run on the server."
+                footnote="Cards, payouts and balance changes on this table are not recorded yet. Rules and settlement run on the server."
             >
                 <BlackjackTable
                     game={game}

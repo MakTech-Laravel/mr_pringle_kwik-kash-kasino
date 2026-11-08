@@ -190,7 +190,7 @@ export default function PokerTable({
                     <span className="font-semibold text-gold">
                         {winner.human ? 'You win' : `${winner.name} wins`}
                     </span>{' '}
-                    with {state.winnerLabel} (demo result).
+                    with {state.winnerLabel}.
                     {!isHost && (
                         <span className="ml-2 text-ink-muted">
                             Your net: {net >= 0 ? '+' : '−'}
@@ -203,7 +203,7 @@ export default function PokerTable({
             <ActionTray>
                 <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
                     <TrayStat
-                        label="Your balance (demo)"
+                        label="Your balance"
                         value={formatCredits(me.stack)}
                     />
                     <TrayStat
@@ -230,9 +230,7 @@ export default function PokerTable({
 
                 {isHost ? (
                     <div className="flex flex-wrap items-center gap-3">
-                        <StatusPill tone="gold">
-                            Host controls (demo)
-                        </StatusPill>
+                        <StatusPill tone="gold">Host controls</StatusPill>
                         {(state.phase === 'waiting' || showdown) && (
                             <ActionButton
                                 className="h-11 px-6"

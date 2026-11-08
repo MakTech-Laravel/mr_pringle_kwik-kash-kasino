@@ -9,7 +9,7 @@ use Inertia\Response;
 class SessionMonitorController extends Controller
 {
     /**
-     * Show the host/monitor view for one hosted session (demo UI only).
+     * Show the host/monitor view for one hosted session.
      */
     public function show(string $session): Response
     {

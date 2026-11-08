@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
-import { useDemoWallet } from '@/hooks/games/use-demo-wallet';
+import { useGameWallet } from '@/hooks/games/use-game-wallet';
 import {
     blackjackValue,
     cardPoints,
@@ -9,8 +9,8 @@ import {
 import type { PlayingCardData } from '@/types/casino';
 
 /*
- * DEMO blackjack state machine. Deterministic (seeded by round), rules are
- * illustrative (3:2 natural, dealer stands on 17). Nothing here is
+ * Blackjack state machine. Deterministic (seeded by round), rules are
+ * simplified (3:2 natural, dealer stands on 17). Nothing here is
  * authoritative; the server will own dealing, rules and settlement.
  */
 
@@ -260,7 +260,7 @@ type Options = {
 
 export function useBlackjack({ startingBalance, autoHost }: Options) {
     const [state, dispatch] = useReducer(reducer, initial);
-    const wallet = useDemoWallet(startingBalance);
+    const wallet = useGameWallet(startingBalance);
     const settledRound = useRef(0);
 
     useEffect(() => {
