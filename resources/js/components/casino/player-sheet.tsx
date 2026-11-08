@@ -257,8 +257,8 @@ export default function PlayerSheet({
                                     onToggleSuspend(player.id);
                                     toast.success(
                                         suspended
-                                            ? 'Account reactivated (demo)'
-                                            : 'Account suspended (demo)',
+                                            ? 'Account reactivated'
+                                            : 'Account suspended',
                                     );
                                 }
                             }}

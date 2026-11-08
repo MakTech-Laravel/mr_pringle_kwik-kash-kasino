@@ -1,5 +1,5 @@
-import { Form, Head, usePage } from '@inertiajs/react';
-import { Lock } from 'lucide-react';
+import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { Fingerprint, Lock } from 'lucide-react';
 import { useState } from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { initialsOf } from '@/lib/format';
+import { edit as editSecurity } from '@/routes/security';
 import type { Auth } from '@/types';
 
 /** Real profile + password forms (Settings controllers), styled per the admin Figma. */
@@ -153,6 +154,27 @@ export default function AdminProfile() {
                                     onClick={() => setPasswordOpen(true)}
                                 >
                                     Change password
+                                </ActionButton>
+                            </div>
+                            <div className="mt-3 flex items-center gap-4 rounded-lg border border-border p-4">
+                                <span className="flex size-10 items-center justify-center rounded-lg bg-gold/10 text-gold">
+                                    <Fingerprint className="size-4" />
+                                </span>
+                                <span className="flex-1">
+                                    <span className="block text-xs font-semibold text-ink">
+                                        Two-factor and passkeys
+                                    </span>
+                                    <span className="text-[11px] text-ink-muted">
+                                        Authenticator app, recovery codes and
+                                        passkeys
+                                    </span>
+                                </span>
+                                <ActionButton
+                                    asChild
+                                    look="outline"
+                                    className="h-10 px-4 text-xs"
+                                >
+                                    <Link href={editSecurity()}>Manage</Link>
                                 </ActionButton>
                             </div>
                         </section>

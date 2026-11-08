@@ -5,7 +5,7 @@ import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
 
 /**
- * Auth shell. INFERRED design: Figma has no login/register art, so this reuses
+ * Auth shell. Figma has no login/register art, so this reuses
  * the approved palette, brand lockup and card/felt motifs. Mobile stacks the
  * showcase above the form.
  */
@@ -52,8 +52,7 @@ export default function AuthSimpleLayout({
                     </p>
                 </div>
                 <p className="relative text-[11px] tracking-wider text-ink-muted/70">
-                    Illustrative prototype. Virtual credits have no real-world
-                    value.
+                    Virtual credits only. No real money is involved.
                 </p>
             </section>
 

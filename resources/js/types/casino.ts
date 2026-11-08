@@ -1,7 +1,7 @@
 /**
  * Domain types for the Kwik Kash Kasino UI.
  *
- * Everything here describes DEMO data shapes. The real Laravel API / Reverb
+ * Everything here describes the data shapes. The real Laravel API / Reverb
  * integration should satisfy these interfaces so the mock sources in
  * `@/mocks` can be replaced without touching visual components.
  */
@@ -110,7 +110,7 @@ export type AdminActivity = {
     date: string;
 };
 
-/** Playing card used by all card-game demos. */
+/** Playing card used by all card games. */
 export type Suit = 'spades' | 'hearts' | 'diamonds' | 'clubs';
 export type Rank =
     | 'A'

@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -24,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureRateLimiting();
     }
 
     /**
@@ -46,5 +50,19 @@ class AppServiceProvider extends ServiceProvider
                 ->uncompromised()
             : null,
         );
+    }
+
+    /**
+     * Throttle the public password-appeal flow so it cannot be used to spam
+     * mailboxes or to guess verification codes.
+     */
+    protected function configureRateLimiting(): void
+    {
+        RateLimiter::for('password-appeal', fn (Request $request) => [
+            Limit::perHour(10)->by('ip:'.$request->ip()),
+            Limit::perHour(3)->by('email:'.strtolower((string) $request->input('email', $request->session()->getId()))),
+        ]);
+
+        RateLimiter::for('password-appeal-code', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
     }
 }

@@ -79,7 +79,7 @@ export default function Transactions() {
                 <PageHeader
                     eyebrow="Account activity"
                     title="Transaction history"
-                    description="A record of all illustrative credit movement on your account."
+                    description="A record of all credit movement on your account."
                 />
                 <FilterBar
                     search={search}

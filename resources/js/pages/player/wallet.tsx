@@ -6,37 +6,37 @@ import PageHeader from '@/components/casino/page-header';
 import RequestStatusPill from '@/components/casino/request-status';
 import { formatNumber, formatSignedCredits } from '@/lib/format';
 import { cn } from '@/lib/utils';
-import { demoWallet, walletTransactions } from '@/mocks/casino';
+import { playerWallet, walletTransactions } from '@/mocks/casino';
 import { transactions } from '@/routes';
 import { cashIn, cashOut } from '@/routes/wallet';
 
 const stats = [
     {
         label: 'Pending cash-in',
-        value: `${formatNumber(demoWallet.pendingCashIn)} CR`,
+        value: `${formatNumber(playerWallet.pendingCashIn)} CR`,
         note: '1 request under review',
     },
     {
         label: 'Pending cash-out',
-        value: `${formatNumber(demoWallet.pendingCashOut)} CR`,
+        value: `${formatNumber(playerWallet.pendingCashOut)} CR`,
         note: 'No active requests',
     },
     {
         label: 'Total deposits',
-        value: `${formatNumber(demoWallet.totalDeposits)} CR`,
+        value: `${formatNumber(playerWallet.totalDeposits)} CR`,
     },
     {
         label: 'Total cash-outs',
-        value: `${formatNumber(demoWallet.totalCashOuts)} CR`,
+        value: `${formatNumber(playerWallet.totalCashOuts)} CR`,
     },
     {
         label: 'Total winnings',
-        value: `${formatNumber(demoWallet.totalWinnings)} CR`,
+        value: `${formatNumber(playerWallet.totalWinnings)} CR`,
         tone: 'text-success-light',
     },
     {
         label: 'Total losses',
-        value: `−${formatNumber(demoWallet.totalLosses)} CR`,
+        value: `−${formatNumber(playerWallet.totalLosses)} CR`,
         tone: 'text-danger-light',
     },
 ];
@@ -54,7 +54,7 @@ export default function Wallet() {
 
                 <BalanceCard
                     label="Available balance"
-                    balance={demoWallet.balance}
+                    balance={playerWallet.balance}
                     caption="Virtual community credits · Not real currency"
                     actions={
                         <>
