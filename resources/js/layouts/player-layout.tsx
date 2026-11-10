@@ -209,20 +209,12 @@ function UserMenu({ user }: { user: User }) {
     );
 }
 
-function TopBar({ onMenu }: { onMenu: () => void }) {
+function TopBar() {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const shell = usePlayerShell();
 
     return (
         <header className="sticky top-0 z-30 flex h-[68px] items-center gap-3 border-b border-border bg-background/90 px-4 backdrop-blur sm:px-6 lg:h-[77px] lg:px-10">
-            <button
-                type="button"
-                onClick={onMenu}
-                aria-label="Open menu"
-                className="flex size-11 items-center justify-center rounded-lg text-ink-muted hover:bg-white/5 lg:hidden"
-            >
-                <Menu className="size-5" />
-            </button>
             <Link href={dashboard()} className="lg:hidden">
                 <BrandLogo compact />
             </Link>
@@ -284,12 +276,22 @@ const tabs = [
         title: 'History',
         icon: History,
         href: () => history().url,
-        match: ['/history', '/transactions'],
+        match: ['/history'],
     },
 ];
 
-function MobileTabBar({ onMore }: { onMore: () => void }) {
+function MobileTabBar({
+    onMore,
+    menuOpen,
+}: {
+    onMore: () => void;
+    menuOpen: boolean;
+}) {
     const { currentUrl } = useCurrentUrl();
+    const onPrimaryTab = tabs.some((tab) =>
+        tab.match.some((prefix) => currentUrl.startsWith(prefix)),
+    );
+    const moreActive = menuOpen || !onPrimaryTab;
 
     return (
         <nav
@@ -317,7 +319,11 @@ function MobileTabBar({ onMore }: { onMore: () => void }) {
             <button
                 type="button"
                 onClick={onMore}
-                className="flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-medium text-ink-muted"
+                aria-expanded={menuOpen}
+                className={cn(
+                    'flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-medium',
+                    moreActive ? 'text-gold' : 'text-ink-muted',
+                )}
             >
                 <Menu className="size-5" />
                 More
@@ -391,7 +397,7 @@ export default function PlayerLayout({ children }: { children: ReactNode }) {
             </Sheet>
 
             <div className="lg:pl-[253px]">
-                <TopBar onMenu={() => setMenuOpen(true)} />
+                <TopBar />
                 <main
                     className={cn(
                         'mx-auto w-full px-4 pt-6 pb-28 sm:px-6 lg:px-10 lg:pt-10 lg:pb-14',
@@ -410,7 +416,10 @@ export default function PlayerLayout({ children }: { children: ReactNode }) {
                 </footer>
             </div>
 
-            <MobileTabBar onMore={() => setMenuOpen(true)} />
+            <MobileTabBar
+                menuOpen={menuOpen}
+                onMore={() => setMenuOpen(true)}
+            />
         </div>
     );
 }
