@@ -197,6 +197,84 @@ function signOut() {
     router.post(logout());
 }
 
+const mobileTabs: AdminNavItem[] = [
+    { title: 'Overview', href: overview().url, icon: LayoutGrid },
+    { title: 'Players', href: players().url, icon: Users },
+    {
+        title: 'Cash-in',
+        href: cashIn().url,
+        icon: Download,
+        badge: control.find((item) => item.href === cashIn().url)?.badge,
+    },
+    { title: 'Sessions', href: sessions().url, icon: Dices },
+];
+
+function tabIsCurrent(item: AdminNavItem, currentUrl: string): boolean {
+    if (item.href === overview().url) {
+        return currentUrl === item.href;
+    }
+
+    return currentUrl === item.href || currentUrl.startsWith(`${item.href}/`);
+}
+
+function AdminMobileTabBar({
+    onMore,
+    menuOpen,
+}: {
+    onMore: () => void;
+    menuOpen: boolean;
+}) {
+    const { currentUrl } = useCurrentUrl();
+    const onPrimaryTab = mobileTabs.some((tab) => tabIsCurrent(tab, currentUrl));
+    const moreActive = menuOpen || !onPrimaryTab;
+
+    return (
+        <nav
+            aria-label="Admin primary"
+            className="kk-safe-bottom fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-gold/20 bg-surface/95 px-1 pt-1.5 backdrop-blur lg:hidden"
+        >
+            {mobileTabs.map((tab) => {
+                const active = tabIsCurrent(tab, currentUrl);
+
+                return (
+                    <Link
+                        key={tab.title}
+                        href={tab.href}
+                        prefetch
+                        aria-current={active ? 'page' : undefined}
+                        className={cn(
+                            'relative flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-medium',
+                            active ? 'text-gold' : 'text-ink-muted',
+                        )}
+                    >
+                        <span className="relative">
+                            <tab.icon className="size-5" />
+                            {!!tab.badge && (
+                                <span className="absolute -top-1.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-crimson px-1 text-[9px] font-semibold text-white">
+                                    {tab.badge}
+                                </span>
+                            )}
+                        </span>
+                        {tab.title}
+                    </Link>
+                );
+            })}
+            <button
+                type="button"
+                onClick={onMore}
+                aria-expanded={menuOpen}
+                className={cn(
+                    'flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[10px] font-medium',
+                    moreActive ? 'text-gold' : 'text-ink-muted',
+                )}
+            >
+                <Menu className="size-5" />
+                More
+            </button>
+        </nav>
+    );
+}
+
 export default function AdminLayout({ children }: { children: ReactNode }) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const casinoOpen = useCasinoOpen();
@@ -301,14 +379,6 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 )}
             >
                 <header className="sticky top-0 z-30 flex h-[68px] items-center gap-3 border-b border-border bg-background/90 px-4 backdrop-blur sm:px-6 lg:px-8">
-                    <button
-                        type="button"
-                        onClick={() => setMenuOpen(true)}
-                        aria-label="Open menu"
-                        className="flex size-11 items-center justify-center rounded-lg text-ink-muted hover:bg-white/5 lg:hidden"
-                    >
-                        <Menu className="size-5" />
-                    </button>
                     <nav
                         aria-label="Breadcrumb"
                         className="flex min-w-0 items-center gap-2 text-sm"
@@ -336,7 +406,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                                     : 'Click to open the casino'
                             }
                             className={cn(
-                                'hidden cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:outline-none sm:inline-flex',
+                                'inline-flex cursor-pointer items-center gap-2 rounded-full border px-2.5 py-1.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:outline-none sm:px-3',
                                 casinoOpen
                                     ? 'border-success/30 text-success-light hover:bg-success/10'
                                     : 'border-crimson/40 text-danger-light hover:bg-crimson/10',
@@ -346,7 +416,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                                 aria-hidden
                                 className="size-2 rounded-full bg-current"
                             />
-                            {casinoOpen ? 'Casino online' : 'Casino offline'}
+                            <span className="hidden sm:inline">
+                                {casinoOpen ? 'Casino online' : 'Casino offline'}
+                            </span>
                         </button>
                         <Link
                             href={notifications()}
@@ -407,11 +479,16 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                         </DropdownMenu>
                     </div>
                 </header>
-                <main className="mx-auto w-full max-w-[1560px] px-4 pt-6 pb-12 sm:px-6 lg:px-8 lg:pt-9">
+                <main className="mx-auto w-full max-w-[1560px] px-4 pt-6 pb-28 sm:px-6 lg:px-8 lg:pt-9 lg:pb-12">
                     {children}
                 </main>
                 <CasinoToggleDialog />
             </div>
+
+            <AdminMobileTabBar
+                menuOpen={menuOpen}
+                onMore={() => setMenuOpen(true)}
+            />
         </div>
     );
 }
